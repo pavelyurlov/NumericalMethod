@@ -185,35 +185,19 @@ MatlabVector& linspace(num start, num end, uint n_points)
 	return result;
 }
 
-// написано кое-как, свалится первой
+// http://stackoverflow.com/questions/8424170/1d-linear-convolution-in-ansi-c-code
 MatlabVector& conv(MatlabVector a, MatlabVector b, int) // int в конце несущественнен
 {
 	MatlabVector &result = *(new MatlabVector(a.size())); // опять-таки, может утечь память
 
-	for (uint i = 0; i < a.size(); i++)
+	for (uint i = 0 + b.size() / 2; i < a.size() + b.size() / 2 - 1; i++)
 	{
-		result[i] = 0;
-		uint start = i - b.size() / 2 + 1;
-		if (start < 0) start = 0;
-		uint end = start + b.size();
-		if (end > a.size()) end = a.size();
-		for (uint j = start; j < end; j++)
+		result[i - b.size() / 2] = 0; // только результат. т.е у результата всё сдвинуто влево. У остальных всё нормально.
+		uint start = (i >= b.size() - 1) ? i - (b.size() - 1) : 0;
+		uint end = (i < a.size() - 1) ? i : a.size() - 1;
+		for (uint j = start; j <= end; j++)
 		{
-			result[i] += a[j] * b[b.size() / 2 + i - j]; // может выйти за пределы массива, todo: повысить паранойю
-			/*
-			try
-			{
-				//ERROR::g_conv_all++;
-				//result.at(i) += a.at(i) * b.at(b.size()/2 + i - j); // выходит за пределы массива, понижая точность и замедляя программу, todo: пересчитать края поточнее
-			}
-			catch (std::out_of_range oor)
-			{
-				//std::cerr << "Out of Range error: " << oor.what() << '\n';
-				std::cerr << "E:OOR, convolution, i = " << i << ", j = " << j << ", i-j = " << i-j << ", size = " << a.size() << std::endl;
-				//ERROR::g_conv_err++;
-				//if (ERROR::g_conv_err > (uint)1000) throw; // промахиваемся в 1 случае из 2500, это 0.0004.
-			}
-			*/
+			result[i - b.size() / 2] += a[j] * b[i - j];
 		}
 	}
 
