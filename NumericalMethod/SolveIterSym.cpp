@@ -48,6 +48,13 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num(*f_w11)(num), 
 	// count
 	for (uint i = 0; i < max_iter; i++)
 	{
+		// collect results
+		result.D11 = D11; result.D12 = D12; result.D22 = D22;
+		result.N1 = N1; result.N2 = N2; result.rh = rh;
+		result.y11 = y11; result.y12 = y12; result.y21 = y21; result.y22 = y22;
+		// end collect results
+		std::cout << result;
+
 		MatlabVector first = h * conv((m1 + m2), D12, 'same') - w21 - w12 -
 			((a / 2)*N1)*(h * (D12 + 2) * (conv(w11, D12, 'same') + conv(w21, D11, 'same')) +
 				h * conv(D11, w21*D12, 'same') + h * conv(D12, w11*D11, 'same')) -

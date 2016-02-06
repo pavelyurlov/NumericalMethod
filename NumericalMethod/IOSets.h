@@ -2,6 +2,7 @@
 
 #include "minitypes.h"
 #include "MatlabVector.h"
+#include <iostream>
 
 struct InputSet
 {
@@ -30,3 +31,5 @@ struct OutputSet
 	MatlabVector rh, D11, D12, D22;
 	num y11, y12, y21, y22, N1, N2;
 };
+
+std::ostream& operator<<(std::ostream&, OutputSet&);

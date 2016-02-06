@@ -153,6 +153,7 @@
     <ClInclude Include="normpdf_checked.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="IOSets.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MatlabVector.cpp" />
     <ClCompile Include="SolveIterSym.cpp" />
