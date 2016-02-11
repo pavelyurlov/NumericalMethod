@@ -64,10 +64,10 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num(*f_w11)(num), 
 		D12 = first / second;
 
 		MatlabVector *tmp = &(w12*D12);
-		y12 = h * std::accumulate(tmp->begin(), tmp->end(), 0) + d12;
+		y12 = h * std::accumulate(tmp->begin(), tmp->end(), 0.0) + d12;
 
 		tmp = &(w21*D12);
-		y21 = h * std::accumulate(tmp->begin(), tmp->end(), 0) + d21;
+		y21 = h * std::accumulate(tmp->begin(), tmp->end(), 0.0) + d21;
 
 		if (isnan(y12) || isnan(y21))
 		{
@@ -99,9 +99,9 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num(*f_w11)(num), 
 		D22 = first / second;
 
 		tmp = &(w11*D11);
-		y11 = h * std::accumulate(tmp->begin(), tmp->end(), 0) + d11;
+		y11 = h * std::accumulate(tmp->begin(), tmp->end(), 0.0) + d11;
 		tmp = &(w22*D22);
-		y22 = h * std::accumulate(tmp->begin(), tmp->end(), 0) + d22;
+		y22 = h * std::accumulate(tmp->begin(), tmp->end(), 0.0) + d22;
 
 		if (isnan(y11) || isnan(y11))
 		{
