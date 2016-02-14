@@ -9,6 +9,7 @@ class MatlabVector :
 public:
 	MatlabVector() {}
 	MatlabVector(uint N) :vector<num>(N) {} // garbage inside?
+	template <class InputIterator> MatlabVector(InputIterator first, InputIterator last) : vector<num>(first, last) {}
 	MatlabVector& operator+(MatlabVector&o) { return per_member_op(o, [](num a, num b) {return a + b; }); } // matlab .+
 	MatlabVector& operator-(MatlabVector&o) { return per_member_op(o, [](num a, num b) {return a - b; }); }
 	MatlabVector& operator/(MatlabVector&o) { return per_member_op(o, [](num a, num b) {return a / b; }); }

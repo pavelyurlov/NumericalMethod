@@ -1,9 +1,12 @@
 // Almost literal port from "solve_iter_sym.m".
 
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include <cstring>
 #include <limits>
 #include <numeric>
 #include <iostream>
+#include <complex>
 #include "minitypes.h"
 #include "MatlabVector.h"
 #include "IOSets.h"
@@ -14,7 +17,7 @@ MatlabVector& precount_func(num param, num(*f)(num), uint N, MatlabVector &rh);
 MatlabVector& conv(MatlabVector a, MatlabVector b, int);
 
 
-// надо убрать повторяющиеся блок кода в collecting results. Макросы?
+// надо убрать повторяющийся блок кода в collecting results. Макросы?
 OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num(*f_w11)(num), num(*f_w12)(num), num(*f_w21)(num), num(*f_w22)(num), num(*f_m1)(num), num(*f_m2)(num), num b1, num b2, num d1, num d2, num d11, num d12, num d21, num d22)
 {
 	OutputSet result;
@@ -62,6 +65,8 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num(*f_w11)(num), 
 				h * conv(D12, w22*D22, 'same') + h * conv(D22, w12*D12, 'same'));
 		MatlabVector second = w12 + w21 + (1 - a / 2)*(b1 + b2) + (a / 2)*(d1 + d2 + d11*N1 + d12*N2 + d21*N1 + d22*N2);
 		D12 = first / second;
+		// 61 секунда при свёртке в лоб
+		// 549 секунд при свёртке с дискретным преобразованием Фурье (думаю, из-за экспонент)
 
 		MatlabVector *tmp = &(w12*D12);
 		y12 = h * std::accumulate(tmp->begin(), tmp->end(), 0.0) + d12;
@@ -186,7 +191,7 @@ MatlabVector& linspace(num start, num end, uint n_points)
 }
 
 // http://stackoverflow.com/questions/8424170/1d-linear-convolution-in-ansi-c-code
-MatlabVector& conv(MatlabVector a, MatlabVector b, int) // int в конце несущественнен
+MatlabVector& conv_direct(MatlabVector a, MatlabVector b)
 {
 	MatlabVector &result = *(new MatlabVector(a.size())); // опять-таки, может утечь память
 
@@ -202,4 +207,55 @@ MatlabVector& conv(MatlabVector a, MatlabVector b, int) // int в конце несуществ
 	}
 
 	return result;
+}
+
+std::vector<std::complex<num>>& dft(MatlabVector &x) // прямое дискретное преобразование Фурье
+{
+	std::vector<std::complex<num>> &res = *(new std::vector<std::complex<num>>(x.size()));
+	for (uint i = 0; i < res.size(); i++)
+	{
+		res[i] = 0;
+		for (uint j = 0; j < x.size(); j++)
+		{
+			res[i] += x[j] * exp(
+				(-std::complex<num>(2 * M_PI *i * j, 0) * std::complex<num>(0, 1))
+				/
+				(std::complex<num>(x.size())));
+		}
+	}
+	return res;
+}
+
+MatlabVector& idft(std::vector<std::complex<num>> &x) // обратное дискретное преобразование Фурье
+{
+	MatlabVector &res = *(new MatlabVector(x.size()));
+	for (uint i = 0; i < res.size(); i++)
+	{
+		std::complex<num> compl_res = 0;
+		for (uint j = 0; j < x.size(); j++)
+		{
+			compl_res += x[j] * exp(
+				(std::complex<num>(2 * M_PI *i * j, 0) * std::complex<num>(0, 1))
+				/
+				(std::complex<num>(x.size())));
+		}
+		res[i] = compl_res.real() / static_cast<num>(x.size());
+	}
+	return res;
+}
+
+MatlabVector& conv_fourier(MatlabVector a, MatlabVector b)
+{
+	auto A = dft(a);
+	auto B = dft(b);
+	for (uint i = 0; i < A.size(); i++)
+	{
+		A[i] = A[i] * B[i];
+	}
+	return idft(A);
+}
+
+MatlabVector& conv(MatlabVector a, MatlabVector b, int) // int в конце несущественнен
+{
+	return conv_direct(a, b);
 }
