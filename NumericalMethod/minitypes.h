@@ -1,4 +1,4 @@
 #pragma once
 
-typedef float num;
+typedef double num;
 typedef unsigned int uint;

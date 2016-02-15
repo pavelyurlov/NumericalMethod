@@ -7,6 +7,7 @@
 #include <numeric>
 #include <iostream>
 #include <complex>
+#include <fftw3.h>
 #include "minitypes.h"
 #include "MatlabVector.h"
 #include "IOSets.h"
@@ -67,6 +68,9 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num(*f_w11)(num), 
 		D12 = first / second;
 		// 61 секунда при свёртке в лоб
 		// 549 секунд при свёртке с дискретным преобразованием Фурье (думаю, из-за экспонент)
+		// 249 секунд при свёртке с дискретным преобразованием Фурье с неоптимальным кешированием (154 МБ памяти -> лишение кеша процессора)
+		// 0,25 секунд с библиотекой fftw
+		// мораль очевидна :D
 
 		MatlabVector *tmp = &(w12*D12);
 		y12 = h * std::accumulate(tmp->begin(), tmp->end(), 0.0) + d12;
@@ -211,16 +215,41 @@ MatlabVector& conv_direct(MatlabVector a, MatlabVector b)
 
 std::vector<std::complex<num>>& dft(MatlabVector &x) // прямое дискретное преобразование Фурье
 {
+	static uint pre_cached_size = 0;
+	static std::complex<num>** pre_cached_array = nullptr;
+
+	bool recount = true;
+	if (x.size() == pre_cached_size) recount = false;
+
+	if (recount)
+	{
+		pre_cached_size = x.size();
+		for (uint i = 0; i < x.size(); i++)
+		{
+			if (pre_cached_array && pre_cached_array[i]) delete pre_cached_array[i];
+		}
+		if (pre_cached_array) delete pre_cached_array;
+		pre_cached_array = new std::complex<num>*[x.size()];
+		for (uint i = 0; i < x.size(); i++)
+		{
+			pre_cached_array[i] = new std::complex<num>[x.size()];
+		}
+	}
+
 	std::vector<std::complex<num>> &res = *(new std::vector<std::complex<num>>(x.size()));
 	for (uint i = 0; i < res.size(); i++)
 	{
 		res[i] = 0;
 		for (uint j = 0; j < x.size(); j++)
 		{
-			res[i] += x[j] * exp(
-				(-std::complex<num>(2 * M_PI *i * j, 0) * std::complex<num>(0, 1))
-				/
-				(std::complex<num>(x.size())));
+			if (recount)
+			{
+				pre_cached_array[i][j] = exp(
+					(-std::complex<num>(2 * M_PI *i * j, 0) * std::complex<num>(0, 1))
+					/
+					(std::complex<num>(x.size())));
+			}
+			res[i] += x[j] * pre_cached_array[i][j];
 		}
 	}
 	return res;
@@ -228,16 +257,42 @@ std::vector<std::complex<num>>& dft(MatlabVector &x) // прямое дискретное преобр
 
 MatlabVector& idft(std::vector<std::complex<num>> &x) // обратное дискретное преобразование Фурье
 {
+	// cache -- copy-paste from dft
+	static uint pre_cached_size = 0;
+	static std::complex<num>** pre_cached_array = nullptr;
+
+	bool recount = true;
+	if (x.size() == pre_cached_size) recount = false;
+
+	if (recount)
+	{
+		pre_cached_size = x.size();
+		for (uint i = 0; i < x.size(); i++)
+		{
+			if (pre_cached_array &&pre_cached_array[i]) delete pre_cached_array[i];
+		}
+		if (pre_cached_array) delete pre_cached_array;
+		pre_cached_array = new std::complex<num>*[x.size()];
+		for (uint i = 0; i < x.size(); i++)
+		{
+			pre_cached_array[i] = new std::complex<num>[x.size()];
+		}
+	}
+
 	MatlabVector &res = *(new MatlabVector(x.size()));
 	for (uint i = 0; i < res.size(); i++)
 	{
 		std::complex<num> compl_res = 0;
 		for (uint j = 0; j < x.size(); j++)
 		{
-			compl_res += x[j] * exp(
-				(std::complex<num>(2 * M_PI *i * j, 0) * std::complex<num>(0, 1))
-				/
-				(std::complex<num>(x.size())));
+			if (recount)
+			{
+				pre_cached_array[i][j] = exp(
+					(std::complex<num>(2 * M_PI *i * j, 0) * std::complex<num>(0, 1))
+					/
+					(std::complex<num>(x.size())));
+			}
+			compl_res += x[j] * pre_cached_array[i][j];
 		}
 		res[i] = compl_res.real() / static_cast<num>(x.size());
 	}
@@ -255,7 +310,65 @@ MatlabVector& conv_fourier(MatlabVector a, MatlabVector b)
 	return idft(A);
 }
 
+MatlabVector& conv_fourier_lib(MatlabVector a, MatlabVector b)
+{
+	static uint size_a = 0, size_b = 0;
+	static fftw_complex *nA, *nB, *fA, *fB; // n - normal, f - transformed
+	static fftw_plan fpa, fpb, bpa; // forward and backward
+
+	if (size_a != a.size() || size_b != b.size())
+	{
+		size_a = a.size(); size_b = b.size();
+		fftw_destroy_plan(fpa); fftw_destroy_plan(bpa); fftw_destroy_plan(fpb); //fftw_destroy_plan(bpb);
+		if (nA) fftw_free(nA);
+		if (nB) fftw_free(nB);
+		if (fA) fftw_free(fA);
+		if (fB) fftw_free(fB);
+
+		nA = (fftw_complex*)fftw_malloc(sizeof(fftw_complex) * size_a);
+		nB = (fftw_complex*)fftw_malloc(sizeof(fftw_complex) * size_b);
+		fA = (fftw_complex*)fftw_malloc(sizeof(fftw_complex) * size_a);
+		fB = (fftw_complex*)fftw_malloc(sizeof(fftw_complex) * size_b);
+
+		fpa = fftw_plan_dft_1d(size_a, nA, fA, FFTW_FORWARD, FFTW_ESTIMATE);
+		fpb = fftw_plan_dft_1d(size_b, nB, fB, FFTW_FORWARD, FFTW_ESTIMATE);
+		bpa = fftw_plan_dft_1d(size_a, fA, nA, FFTW_BACKWARD, FFTW_ESTIMATE);
+		//bpb = fftw_plan_dft_1d(size_b, fB, nB, FFTW_BACKWARD, FFTW_ESTIMATE);
+	}
+
+	for (uint i = 0; i < a.size(); i++)
+	{
+		nA[i][0] = a[i];
+		nA[i][1] = 0;
+	}
+	fftw_execute(fpa);
+
+	for (uint i = 0; i < b.size(); i++)
+	{
+		nB[i][0] = b[i];
+		nB[i][1] = 0;
+	}
+	fftw_execute(fpb);
+
+	for (uint i = 0; i < a.size(); i++) // выход за пределы, если массивы разного размера. Но этого не должно случиться.
+	{
+		auto tmp_compl = std::complex<num>(fA[i][0], fA[i][1]) * std::complex<num>(fB[i][0], fB[i][1]);
+		fA[i][0] = tmp_compl.real();
+		fA[i][1] = tmp_compl.imag();
+	}
+
+	fftw_execute(bpa);
+
+	MatlabVector &res = *(new MatlabVector(a.size()));
+	for (uint i = 0; i < a.size(); i++)
+	{
+		a[i] = nA[i][0];
+	}
+
+	return res;
+}
+
 MatlabVector& conv(MatlabVector a, MatlabVector b, int) // int в конце несущественнен
 {
-	return conv_direct(a, b);
+	return conv_fourier_lib(a, b);
 }
