@@ -162,6 +162,9 @@
     <ClCompile Include="MatlabVector.cpp" />
     <ClCompile Include="SolveIterSym.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Makefile" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
