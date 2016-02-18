@@ -1,4 +1,5 @@
 #include "MatlabVector.h"
+#include <string>
 
 
 // может, если возвращать копии, а не ссылки, то утечек не будет?

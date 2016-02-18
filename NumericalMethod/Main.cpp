@@ -7,7 +7,7 @@
 
 extern OutputSet solve_iter_sym(InputSet);
 
-void main()
+int main()
 {
 	InputSet is;
 	//---------- - Model Constants--------
@@ -37,5 +37,5 @@ void main()
 
 	OutputSet os;
 	os = solve_iter_sym(is);
-	return;
+	return 0;
 }
