@@ -71,8 +71,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>E:\Код\Либы\fftw-3.3.4-dll32;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\Код\Либы\fftw-3.3.4-dll32;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Program Files\Intel\MKL\10.2.6.037\include;E:\Код\Либы\fftw-3.3.4-dll32;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\Код\Либы\fftw-3.3.4-dll32;C:\Program Files\Intel\MKL\10.2.6.037\ia32\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -95,7 +95,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libfftw3-3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libfftw3-3.lib;mkl_intel_c.lib;mkl_core.lib;mkl_sequential.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
