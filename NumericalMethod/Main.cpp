@@ -4,11 +4,20 @@
 #include "normpdf_checked.h"
 #include "ERROR.h"
 #include <iostream>
+#include <mpi.h>
 
 extern OutputSet solve_iter_sym(InputSet);
 
-int main()
+int main(int cmdn, char* cmd[])
 {
+	MPI_Init(&cmdn, &cmd);
+
+	int rank, size;
+	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+	MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+	std::cout << "Process " << rank << ", total proc count: " << size << std::endl;
+
 	InputSet is;
 	//---------- - Model Constants--------
 	static const num sm1 = 0.04, sm2 = 0.06;
@@ -37,5 +46,7 @@ int main()
 
 	OutputSet os;
 	os = solve_iter_sym(is);
+
+	MPI_Finalize();
 	return 0;
 }
