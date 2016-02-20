@@ -21,3 +21,8 @@ MatlabVector MatlabVector::per_member_op(num a, num(*op)(num, num))
 }
 
 MatlabVector operator*(num n, MatlabVector mv) { return mv*n; }
+
+MatlabVector operator+(MatlabVector a, MatlabVector b) { return a.operator_plus(b); }
+MatlabVector operator*(MatlabVector a, MatlabVector b) { return a.operator_mult(b); }
+MatlabVector operator-(MatlabVector a, MatlabVector b) { return a.operator_minus(b); }
+MatlabVector operator/(MatlabVector a, MatlabVector b) { return a.operator_frag(b); }

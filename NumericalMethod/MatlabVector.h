@@ -8,12 +8,12 @@ class MatlabVector :
 {
 public:
 	MatlabVector() {}
-	MatlabVector(uint N) :vector<num>(N) {} // garbage inside?
+	MatlabVector(uint N) :std::vector<num>(N) {} // garbage inside?
 	template <class InputIterator> MatlabVector(InputIterator first, InputIterator last) : vector<num>(first, last) {}
-	MatlabVector operator+(MatlabVector&o) { return per_member_op(o, [](num a, num b) {return a + b; }); } // matlab .+
-	MatlabVector operator-(MatlabVector&o) { return per_member_op(o, [](num a, num b) {return a - b; }); }
-	MatlabVector operator/(MatlabVector&o) { return per_member_op(o, [](num a, num b) {return a / b; }); }
-	MatlabVector operator*(MatlabVector&o) { return per_member_op(o, [](num a, num b) {return a * b; }); }
+	MatlabVector operator_plus(MatlabVector&o) { return per_member_op(o, [](num a, num b) {return a + b; }); } // matlab .+
+	MatlabVector operator_minus(MatlabVector&o) { return per_member_op(o, [](num a, num b) {return a - b; }); }
+	MatlabVector operator_frag(MatlabVector&o) { return per_member_op(o, [](num a, num b) {return a / b; }); }
+	MatlabVector operator_mult(MatlabVector&o) { return per_member_op(o, [](num a, num b) {return a * b; }); }
 	MatlabVector operator+(num a) { return per_member_op(a, [](num b, num c) {return b + c; }); }
 	MatlabVector operator*(num a) { return per_member_op(a, [](num b, num c) {return b * c; }); }
 private:
@@ -22,3 +22,9 @@ private:
 };
 
 MatlabVector operator*(num n, MatlabVector mv);
+
+MatlabVector operator+(MatlabVector a, MatlabVector b);// { return a.operator_plus(b); }
+MatlabVector operator*(MatlabVector a, MatlabVector b);// { return a.operator_mult(b); }
+MatlabVector operator-(MatlabVector a, MatlabVector b);// { return a.operator_minus(b); }
+MatlabVector operator/(MatlabVector a, MatlabVector b);// { return a.operator_frag(b); }
+
