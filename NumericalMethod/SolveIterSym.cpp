@@ -11,9 +11,9 @@
 #include "IOSets.h"
 #include "ERROR.h"
 
-MatlabVector& linspace(num start, num end, uint n_points);
-MatlabVector& precount_func(num param, num(*f)(num), uint N, MatlabVector &rh);
-MatlabVector& conv(MatlabVector a, MatlabVector b, int);
+MatlabVector linspace(num start, num end, uint n_points);
+MatlabVector precount_func(num param, num(*f)(num), uint N, MatlabVector &rh);
+MatlabVector conv(MatlabVector a, MatlabVector b, int);
 
 
 // надо убрать повторяющийся блок кода в collecting results. Макросы?
@@ -55,7 +55,9 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num(*f_w11)(num), 
 		result.N1 = N1; result.N2 = N2; result.rh = rh;
 		result.y11 = y11; result.y12 = y12; result.y21 = y21; result.y22 = y22;
 		// end collect results
-		std::cout << result;
+		//std::cout << result;
+
+		MatlabVector test = m1 * m2;
 
 		MatlabVector first = h * conv((m1 + m2), D12, 'same') - w21 - w12 -
 			((a / 2)*N1)*(h * (D12 + 2) * (conv(w11, D12, 'same') + conv(w21, D11, 'same')) +
@@ -70,11 +72,11 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num(*f_w11)(num), 
 		// 0,25 секунд с библиотекой fftw
 		// мораль очевидна :D
 
-		MatlabVector *tmp = &(w12*D12);
-		y12 = h * std::accumulate(tmp->begin(), tmp->end(), 0.0) + d12;
+		MatlabVector tmp = w12*D12;
+		y12 = h * std::accumulate(tmp.begin(), tmp.end(), 0.0) + d12;
 
-		tmp = &(w21*D12);
-		y21 = h * std::accumulate(tmp->begin(), tmp->end(), 0.0) + d21;
+		tmp = w21*D12;
+		y21 = h * std::accumulate(tmp.begin(), tmp.end(), 0.0) + d21;
 
 		if (isnan(y12) || isnan(y21))
 		{
@@ -105,10 +107,10 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num(*f_w11)(num), 
 		second = w22 + (1 - a / 2)*b2 + (a / 2)*(d2 + N2*d22 + N1*d21);
 		D22 = first / second;
 
-		tmp = &(w11*D11);
-		y11 = h * std::accumulate(tmp->begin(), tmp->end(), 0.0) + d11;
-		tmp = &(w22*D22);
-		y22 = h * std::accumulate(tmp->begin(), tmp->end(), 0.0) + d22;
+		tmp = w11*D11;
+		y11 = h * std::accumulate(tmp.begin(), tmp.end(), 0.0) + d11;
+		tmp = w22*D22;
+		y22 = h * std::accumulate(tmp.begin(), tmp.end(), 0.0) + d22;
 
 		if (isnan(y11) || isnan(y11))
 		{
@@ -170,9 +172,9 @@ void swap(T &a, T &b)
 	b = temp;
 }
 
-MatlabVector& precount_func(num param, num(*f)(num), uint N, MatlabVector &rh)
+MatlabVector precount_func(num param, num(*f)(num), uint N, MatlabVector &rh)
 {
-	MatlabVector &result = *(new MatlabVector(N)); // память?
+	MatlabVector result = MatlabVector(N);
 	for (uint i = 0; i < N; i++)
 	{
 		result[i] = param * f(rh[i]);
@@ -180,11 +182,11 @@ MatlabVector& precount_func(num param, num(*f)(num), uint N, MatlabVector &rh)
 	return result;
 }
 
-MatlabVector& linspace(num start, num end, uint n_points)
+MatlabVector linspace(num start, num end, uint n_points)
 {
 	if (start > end) swap(start, end);
 	num step = (end - start) / n_points;
-	MatlabVector &result = *(new MatlabVector(n_points)); // может быть утечка памяти
+	MatlabVector result = MatlabVector(n_points);
 	for (uint i = 0; i < n_points; i++)
 	{
 		result[i] = start + step * i;
