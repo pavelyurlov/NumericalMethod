@@ -71,8 +71,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\Program Files\Intel\MKL\10.2.6.037\include;C:\Program Files (x86)\Microsoft SDKs\MPI\Include;C:\Program Files (x86)\Microsoft SDKs\MPI\Include\x86;E:\Код\Либы\fftw-3.3.4-dll32;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files (x86)\Microsoft SDKs\MPI\Lib\x86;E:\Код\Либы\fftw-3.3.4-dll32;D:\Program Files\Intel\MKL\10.2.6.037\ia32\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\OLD\Program Files\Intel\MKL\10.2.6.037\include;C:\Program Files (x86)\Microsoft SDKs\MPI\Include;C:\Program Files (x86)\Microsoft SDKs\MPI\Include\x86;E:\Код\Либы\fftw-3.3.4-dll32;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files (x86)\Microsoft SDKs\MPI\Lib\x86;E:\Код\Либы\fftw-3.3.4-dll32;D:\OLD\Program Files\Intel\MKL\10.2.6.037\ia32\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
