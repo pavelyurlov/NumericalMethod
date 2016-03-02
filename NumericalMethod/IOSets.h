@@ -2,7 +2,7 @@
 
 #include "minitypes.h"
 #include "MatlabVector.h"
-#include "json\json.h"
+#include "./json/json.h"
 #include <iostream>
 
 struct InputSet
