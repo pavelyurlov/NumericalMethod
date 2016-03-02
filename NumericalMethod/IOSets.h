@@ -2,6 +2,7 @@
 
 #include "minitypes.h"
 #include "MatlabVector.h"
+#include "json\json.h"
 #include <iostream>
 
 struct InputSet
@@ -24,12 +25,15 @@ struct InputSet
 	num d12;
 	num d21;
 	num d22;
+	operator Json::Value() const;
 };
 
 struct OutputSet
 {
 	MatlabVector rh, D11, D12, D22;
 	num y11, y12, y21, y22, N1, N2;
+	operator Json::Value() const;
 };
 
 std::ostream& operator<<(std::ostream&, OutputSet&);
+std::ostream& operator<<(std::ostream&, InputSet&);

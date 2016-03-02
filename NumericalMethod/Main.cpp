@@ -47,6 +47,12 @@ int main(int cmdn, char* cmd[])
 	OutputSet os;
 	os = solve_iter_sym(is);
 
+	Json::Value result;
+	result["Input"] = is;
+	result["Output"] = os;
+
+	std::cout << result;
+
 	MPI_Finalize();
 	return 0;
 }

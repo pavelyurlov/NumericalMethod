@@ -64,3 +64,13 @@ MatlabVector MatlabVector::operator*(num a)
 	for (uint i = 0; i < this->size(); i++) result[i] = (*this)[i] * a;
 	return result;
 }
+
+MatlabVector::operator Json::Value() const
+{
+	Json::Value res = Json::arrayValue;
+	for each (auto var in *this)
+	{
+		res.append(var);
+	}
+	return res;
+}
