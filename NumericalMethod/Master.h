@@ -26,7 +26,7 @@ void count_input(std::vector<InputSet> input_array)
 	std::ofstream ofs;
 	ofs.open(filename.str());
 
-	for (int i = 0; i < input_array.size(); i++)
+	for (uint i = 0; i < input_array.size(); i++)
 	{
 		if (i % mpi_size == mpi_rank)
 		{

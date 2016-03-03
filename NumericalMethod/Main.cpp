@@ -2,6 +2,7 @@
 
 #include "IOSets.h"
 #include "ERROR.h"
+#include "Master.h"
 #include <iostream>
 #include <mpi.h>
 
@@ -43,14 +44,27 @@ int main(int cmdn, char* cmd[])
 	is.f_m1 = [](num r) {return normpdf_checked(r, sm1, 1); };
 	is.f_m2 = [](num r) {return normpdf_checked(r, sm2, 1); };*/
 
-	OutputSet os;
-	os = solve_iter_sym(is);
+	//OutputSet os;
+	//os = solve_iter_sym(is);
 
-	Json::Value result;
-	result["Input"] = is;
-	result["Output"] = os;
+	//Json::Value result;
+	//result["Input"] = is;
+	//result["Output"] = os;
 
-	std::cout << result;
+	//std::cout << result;
+
+
+	std::vector<InputSet> input;
+	
+	for (num d12 = 0; d12 < 0.001; d12 += 0.001 * 0.01)
+		for (num sm2 = 0; sm2 < 0.16; sm2 += 0.16 * 0.01)
+		{
+			is.d12 = d12;
+			is.sm2 = sm2;
+			input.push_back(is);
+		}
+
+	count_input(input);
 
 	MPI_Finalize();
 	return 0;
