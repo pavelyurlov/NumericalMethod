@@ -10,14 +10,15 @@
 #include "MatlabVector.h"
 #include "IOSets.h"
 #include "ERROR.h"
+#include "normpdf_checked.h"
 
 MatlabVector linspace(num start, num end, uint n_points);
-MatlabVector precount_func(num param, num(*f)(num), uint N, MatlabVector &rh);
+MatlabVector precount_func(num param, num sigma, uint N, MatlabVector &rh);
 MatlabVector conv(MatlabVector a, MatlabVector b, int);
 
 
 // надо убрать повторяющийся блок кода в collecting results. Макросы?
-OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num(*f_w11)(num), num(*f_w12)(num), num(*f_w21)(num), num(*f_w22)(num), num(*f_m1)(num), num(*f_m2)(num), num b1, num b2, num d1, num d2, num d11, num d12, num d21, num d22)
+OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12, num sw21, num sw22, num sm1, num sm2, num b1, num b2, num d1, num d2, num d11, num d12, num d21, num d22)
 {
 	OutputSet result;
 
@@ -25,12 +26,12 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num(*f_w11)(num), 
 	MatlabVector rh = linspace(-A, A, N);
 	num h = rh[2] - rh[1];
 
-	MatlabVector m1 = precount_func(b1, f_m1, N, rh);
-	MatlabVector m2 = precount_func(b2, f_m2, N, rh);
-	MatlabVector w11 = precount_func(d11, f_w11, N, rh);
-	MatlabVector w21 = precount_func(d21, f_w21, N, rh);
-	MatlabVector w12 = precount_func(d12, f_w12, N, rh);
-	MatlabVector w22 = precount_func(d22, f_w22, N, rh);
+	MatlabVector m1 = precount_func(b1, sm1, N, rh);
+	MatlabVector m2 = precount_func(b2, sm2, N, rh);
+	MatlabVector w11 = precount_func(d11, sw11, N, rh);
+	MatlabVector w21 = precount_func(d21, sw21, N, rh);
+	MatlabVector w12 = precount_func(d12, sw12, N, rh);
+	MatlabVector w22 = precount_func(d22, sw22, N, rh);
 
 	// init
 	MatlabVector D11 = MatlabVector(N); std::fill(D11.begin(), D11.end(), 0);
@@ -161,7 +162,7 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num(*f_w11)(num), 
 
 OutputSet solve_iter_sym(InputSet s)
 {
-	return solve_iter_sym(s.A, s.N, s.max_iter, s.a, s.f_w11, s.f_w12, s.f_w21, s.f_w22, s.f_m1, s.f_m2, s.b1, s.b2, s.d1, s.d2, s.d11, s.d12, s.d21, s.d22);
+	return solve_iter_sym(s.A, s.N, s.max_iter, s.a, s.sw11, s.sw12, s.sw21, s.sw22, s.sm1, s.sm2, s.b1, s.b2, s.d1, s.d2, s.d11, s.d12, s.d21, s.d22);
 }
 
 template <typename T>
@@ -172,12 +173,12 @@ void swap(T &a, T &b)
 	b = temp;
 }
 
-MatlabVector precount_func(num param, num(*f)(num), uint N, MatlabVector &rh)
+MatlabVector precount_func(num param, num sigma, uint N, MatlabVector &rh)
 {
 	MatlabVector result = MatlabVector(N);
 	for (uint i = 0; i < N; i++)
 	{
-		result[i] = param * f(rh[i]);
+		result[i] = param * normpdf_checked(rh[i], sigma, 1);
 	}
 	return result;
 }

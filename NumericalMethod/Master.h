@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <mpi.h>
+#include "./json/json.h"
 #include "IOSets.h"
 #include "minitypes.h"
 
@@ -25,17 +26,24 @@ void count_input(std::vector<InputSet> input_array)
 	std::ofstream ofs;
 	ofs.open(filename.str());
 
-	ofs << "Process #" << mpi_rank << " of " << mpi_size << std::endl;
-
 	for (int i = 0; i < input_array.size(); i++)
 	{
 		if (i % mpi_size == mpi_rank)
 		{
-			ofs << "Job #" << i << " with input:" << std::endl;
+			Json::Value root;
+			root["JobNumber"] = i;
+			root["Input"] = input_array[i];
+			root["Output"] = solve_iter_sym(input_array[i]);
+			ofs << root;
+			root.clear();
+
+			/*ofs << "Job #" << i << " with input:" << std::endl;
 			ofs << input_array[i] << std::endl;
 			ofs << "output:" << std::endl;
 			ofs << solve_iter_sym(input_array[i]);
-			ofs << "end"<< std::endl;
+			ofs << "end"<< std::endl;*/
 		}
 	}
+
+	ofs.close();
 }

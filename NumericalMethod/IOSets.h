@@ -11,12 +11,18 @@ struct InputSet
 	uint N;
 	uint max_iter;
 	num a;
-	num(*f_w11)(num);
+	/*num(*f_w11)(num);
 	num(*f_w12)(num);
 	num(*f_w21)(num);
 	num(*f_w22)(num);
 	num(*f_m1)(num);
-	num(*f_m2)(num);
+	num(*f_m2)(num);*/
+	num sw11;
+	num sw12;
+	num sw21;
+	num sw22;
+	num sm1;
+	num sm2;
 	num b1;
 	num b2;
 	num d1;
@@ -33,6 +39,12 @@ struct InputSet
 		root["max_iter"] = this->max_iter;
 		root["a"] = this->a;
 		//root["f_***"] = this->f_m1***.rasterize(); //TODO
+		root["sw11"] = this->sw11;
+		root["sw12"] = this->sw12;
+		root["sw21"] = this->sw21;
+		root["sw22"] = this->sw22;
+		root["sm1"] = this->sm1;
+		root["sm2"] = this->sm2;
 		root["b1"] = this->b1;
 		root["b2"] = this->b2;
 		root["d1"] = this->d1;
