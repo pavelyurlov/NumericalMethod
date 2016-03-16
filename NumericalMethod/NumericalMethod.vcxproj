@@ -152,7 +152,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ERROR.h" />
     <ClInclude Include="IOSets.h" />
     <ClInclude Include="Master.h" />
     <ClInclude Include="MatlabVector.h" />

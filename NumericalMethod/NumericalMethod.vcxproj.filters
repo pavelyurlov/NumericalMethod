@@ -47,9 +47,6 @@
     <ClInclude Include="normpdf_checked.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="ERROR.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="Master.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>

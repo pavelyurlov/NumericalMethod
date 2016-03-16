@@ -30,15 +30,8 @@ void count_input(std::vector<InputSet> input_array)
 			newborn["JobNumber"] = i;
 			newborn["Input"] = input_array[i];
 			newborn["Output"] = solve_iter_sym(input_array[i]);
-			//ofs << root;
 			root.append(newborn);
 			newborn.clear(); // too paranoic?
-
-			/*ofs << "Job #" << i << " with input:" << std::endl;
-			ofs << input_array[i] << std::endl;
-			ofs << "output:" << std::endl;
-			ofs << solve_iter_sym(input_array[i]);
-			ofs << "end"<< std::endl;*/
 		}
 	}
 

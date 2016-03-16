@@ -9,7 +9,6 @@
 #include "minitypes.h"
 #include "MatlabVector.h"
 #include "IOSets.h"
-#include "ERROR.h"
 #include "normpdf_checked.h"
 
 MatlabVector linspace(num start, num end, uint n_points);

@@ -68,10 +68,6 @@ MatlabVector MatlabVector::operator*(num a)
 MatlabVector::operator Json::Value() const
 {
 	Json::Value res = Json::arrayValue;
-	/*for each (auto var in *this)
-	{
-		res.append(var);
-	}*/
 	for (auto i = this->begin(); i != this->end(); i++)
 	{
 		res.append(*i);

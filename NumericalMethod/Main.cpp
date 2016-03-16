@@ -1,7 +1,6 @@
 // "solve_nonlinear_correct.m"
 
 #include "IOSets.h"
-#include "ERROR.h"
 #include "Master.h"
 #include <iostream>
 #include <mpi.h>
@@ -36,22 +35,6 @@ int main(int cmdn, char* cmd[])
 	//-------- - Closure Constants------ -
 	is.a = 0.4;
 
-
-	/*is.f_w11 = [](num r) {return normpdf_checked(r, sw11, 1); };
-	is.f_w22 = [](num r) {return normpdf_checked(r, sw22, 1); };
-	is.f_w12 = [](num r) {return normpdf_checked(r, sw12, 1); };
-	is.f_w21 = [](num r) {return normpdf_checked(r, sw21, 1); };
-	is.f_m1 = [](num r) {return normpdf_checked(r, sm1, 1); };
-	is.f_m2 = [](num r) {return normpdf_checked(r, sm2, 1); };*/
-
-	//OutputSet os;
-	//os = solve_iter_sym(is);
-
-	//Json::Value result;
-	//result["Input"] = is;
-	//result["Output"] = os;
-
-	//std::cout << result;
 
 
 	std::vector<InputSet> input;
