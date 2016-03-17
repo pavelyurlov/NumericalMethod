@@ -57,62 +57,17 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 		// end collect results
 		//std::cout << result;
 
-		MatlabVector test = m1 * m2;
+		N1 = (b1 - d1) / y11;
 
-		MatlabVector first = h * conv((m1 + m2), D12, 'same') - w21 - w12 -
-			((a / 2)*N1)*(h * (D12 + 2) * (conv(w11, D12, 'same') + conv(w21, D11, 'same')) +
-				h * conv(D11, w21*D12, 'same') + h * conv(D12, w11*D11, 'same')) -
-			(a / 2)*N2*(h * (D12 + 2) * (conv(w12, D22, 'same') + conv(w22, D12, 'same')) +
-				h * conv(D12, w22*D22, 'same') + h * conv(D22, w12*D12, 'same'));
-		MatlabVector second = w12 + w21 + (1 - a / 2)*(b1 + b2) + (a / 2)*(d1 + d2 + d11*N1 + d12*N2 + d21*N1 + d22*N2);
-		D12 = first / second;
-		// 61 секунда при свёртке в лоб
-		// 549 секунд при свёртке с дискретным преобразованием Фурье (думаю, из-за экспонент)
-		// 249 секунд при свёртке с дискретным преобразованием Фурье с неоптимальным кешированием (154 МБ памяти -> лишение кеша процессора)
-		// 0,25 секунд с библиотекой fftw
-		// мораль очевидна :D
-
-		MatlabVector tmp = w12*D12;
-		y12 = h * std::accumulate(tmp.begin(), tmp.end(), 0.0) + d12;
-
-		tmp = w21*D12;
-		y21 = h * std::accumulate(tmp.begin(), tmp.end(), 0.0) + d21;
-
-		if (isnan(y12) || isnan(y21))
-		{
-			y11 = NAN;
-			y12 = NAN;
-			y21 = NAN;
-			y22 = NAN;
-			// collect results
-			result.D11 = D11; result.D12 = D12; result.D22 = D22;
-			result.N1 = N1; result.N2 = N2; result.rh = rh;
-			result.y11 = y11; result.y12 = y12; result.y21 = y21; result.y22 = y22;
-			// end collect results
-			return result;
-		}
-
-		N1 = ((b1 - d1)*y22 - (b2 - d2)*y12) / (y11*y22 - y12*y21);
-		N2 = ((b2 - d2)*y11 - (b1 - d1)*y21) / (y11*y22 - y12*y21);
-
-		first = (1 / N1) * m1 - w11 + h * conv(m1, D11, 'same') -
-			(a / 2)*N1*(h * (D11 + 2)*conv(w11, D11, 'same') + h * conv(D11, w11*D11, 'same')) -
-			(a / 2)*N2*(h * (D11 + 2)*conv(w12, D12, 'same') + h * conv(D12, w12*D12, 'same'));
-		second = w11 + (1 - a / 2)*b1 + (a / 2)*(d1 + N1*d11 + N2*d12);
+		MatlabVector first = (1 / N1) * m1 - w11 + h * conv(m1, D11, 'same') -
+			(a / 2)*N1*(h * (D11 + 2)*conv(w11, D11, 'same') + h * conv(D11, w11*D11, 'same'));
+		MatlabVector second = w11 + (1 - a / 2)*b1 + (a / 2)*(d1 + N1*d11);
 		D11 = first / second;
 
-		first = (1 / N2) * m2 - w22 + h * conv(m2, D22, 'same') -
-			(a / 2)*N2*(h * (D22 + 2)*conv(w22, D22, 'same') + h * conv(D22, w22*D22, 'same')) -
-			(a / 2)*N1*(h * (D22 + 2)*conv(w21, D12, 'same') + h * conv(D12, w21*D12, 'same'));
-		second = w22 + (1 - a / 2)*b2 + (a / 2)*(d2 + N2*d22 + N1*d21);
-		D22 = first / second;
-
-		tmp = w11*D11;
+		MatlabVector tmp = w11*D11;
 		y11 = h * std::accumulate(tmp.begin(), tmp.end(), 0.0) + d11;
-		tmp = w22*D22;
-		y22 = h * std::accumulate(tmp.begin(), tmp.end(), 0.0) + d22;
-
-		if (isnan(y11) || isnan(y11))
+		
+		if (isnan(y11) || isnan(y11)) // wtf?
 		{
 			y11 = NAN;
 			y12 = NAN;
@@ -126,10 +81,9 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 			return result;
 		}
 
-		num N1_new = ((b1 - d1)*y22 - (b2 - d2)*y12) / (y11*y22 - y12*y21);
-		num N2_new = ((b2 - d2)*y11 - (b1 - d1)*y21) / (y11*y22 - y12*y21);
+		num N1_new = (b1 - d1) / y11;
 
-		num err = abs(N2 - N2_new) + abs(N1 - N1_new);
+		num err = abs(N1 - N1_new);
 		if ((err < eps) || (err > prev_err))
 		{
 			if (err > prev_err)
@@ -149,7 +103,6 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 
 		prev_err = err;
 		N1 = N1_new;
-		N2 = N2_new;
 	}
 	// collect results
 	result.D11 = D11; result.D12 = D12; result.D22 = D22;

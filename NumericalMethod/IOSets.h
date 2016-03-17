@@ -33,18 +33,18 @@ struct InputSet
 		root["max_iter"] = this->max_iter;
 		root["a"] = this->a;
 		root["sw11"] = this->sw11;
-		root["sw12"] = this->sw12;
-		root["sw21"] = this->sw21;
-		root["sw22"] = this->sw22;
+		//root["sw12"] = this->sw12;
+		//root["sw21"] = this->sw21;
+		//root["sw22"] = this->sw22;
 		root["sm1"] = this->sm1;
-		root["sm2"] = this->sm2;
+		//root["sm2"] = this->sm2;
 		root["b1"] = this->b1;
-		root["b2"] = this->b2;
+		//root["b2"] = this->b2;
 		root["d1"] = this->d1;
-		root["d2"] = this->d2;
+		//root["d2"] = this->d2;
 		root["d11"] = this->d11;
-		root["d12"] = this->d12;
-		root["d22"] = this->d22;
+		//root["d12"] = this->d12;
+		//root["d22"] = this->d22;
 		return root;
 	}
 };
@@ -58,14 +58,14 @@ struct OutputSet
 		Json::Value root;
 		root["rh"] = this->rh;
 		root["D11"] = this->D11;
-		root["D12"] = this->D12;
-		root["D22"] = this->D22;
+		//root["D12"] = this->D12;
+		//root["D22"] = this->D22;
 		root["y11"] = this->y11;
-		root["y12"] = this->y12;
-		root["y21"] = this->y21;
-		root["y22"] = this->y22;
+		//root["y12"] = this->y12;
+		//root["y21"] = this->y21;
+		//root["y22"] = this->y22;
 		root["N1"] = this->N1;
-		root["N2"] = this->N2;
+		//root["N2"] = this->N2;
 		return root;
 	}
 };
