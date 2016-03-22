@@ -4,6 +4,7 @@
 #include "MatlabVector.h"
 #include "./json/json.h"
 #include <iostream>
+#include "Preferences.h"
 
 struct InputSet
 {
@@ -56,10 +57,13 @@ struct OutputSet
 	operator Json::Value() const
 	{
 		Json::Value root;
-		root["rh"] = this->rh;
-		root["D11"] = this->D11;
-		root["D12"] = this->D12;
-		root["D22"] = this->D22;
+		if (preferences.print_D)
+		{
+			root["rh"] = this->rh;
+			root["D11"] = this->D11;
+			root["D12"] = this->D12;
+			root["D22"] = this->D22;
+		}
 		root["y11"] = this->y11;
 		root["y12"] = this->y12;
 		root["y21"] = this->y21;

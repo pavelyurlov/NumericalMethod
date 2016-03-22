@@ -161,6 +161,7 @@
     <ClInclude Include="MatlabVector.h" />
     <ClInclude Include="minitypes.h" />
     <ClInclude Include="normpdf_checked.h" />
+    <ClInclude Include="Preferences.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Fourier.cpp" />
