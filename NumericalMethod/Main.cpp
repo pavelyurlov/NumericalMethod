@@ -38,14 +38,11 @@ int main(int cmdn, char* cmd[])
 
 
 	std::vector<InputSet> input;
-	
-	for (num d12 = 0; d12 < 0.001; d12 += 0.001 * 0.01)
-		for (num sm2 = 0; sm2 < 0.16; sm2 += 0.16 * 0.01)
-		{
-			is.d12 = d12;
-			is.sm2 = sm2;
+
+	for (is.d1 = 0; is.d1 < 1; is.d1 += 0.01)
+		for (is.d2 = 0; is.d2 < 1; is.d2 += 0.01)
 			input.push_back(is);
-		}
+
 
 	count_input(input);
 
