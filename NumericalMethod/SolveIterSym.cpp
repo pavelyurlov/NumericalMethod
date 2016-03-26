@@ -14,6 +14,7 @@
 MatlabVector linspace(num start, num end, uint n_points);
 MatlabVector precount_func(num param, num sigma, uint N, MatlabVector &rh);
 MatlabVector conv(MatlabVector a, MatlabVector b, int);
+extern OutputSet solve_iter_sym_one_kind(num A, uint N, uint max_iter, num a, num sw11, num sw12, num sw21, num sw22, num sm1, num sm2, num b1, num b2, num d1, num d2, num d11, num d12, num d21, num d22);
 
 
 // надо убрать повторяющийся блок кода в collecting results. Макросы?
@@ -161,7 +162,10 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 
 OutputSet solve_iter_sym(InputSet s)
 {
-	return solve_iter_sym(s.A, s.N, s.max_iter, s.a, s.sw11, s.sw12, s.sw21, s.sw22, s.sm1, s.sm2, s.b1, s.b2, s.d1, s.d2, s.d11, s.d12, s.d21, s.d22);
+	if (preferences.one_kind)
+		return solve_iter_sym_one_kind(s.A, s.N, s.max_iter, s.a, s.sw11, s.sw12, s.sw21, s.sw22, s.sm1, s.sm2, s.b1, s.b2, s.d1, s.d2, s.d11, s.d12, s.d21, s.d22);
+	else
+		return solve_iter_sym(s.A, s.N, s.max_iter, s.a, s.sw11, s.sw12, s.sw21, s.sw22, s.sm1, s.sm2, s.b1, s.b2, s.d1, s.d2, s.d11, s.d12, s.d21, s.d22);
 }
 
 template <typename T>

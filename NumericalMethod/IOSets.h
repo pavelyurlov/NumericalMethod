@@ -61,15 +61,21 @@ struct OutputSet
 		{
 			root["rh"] = this->rh;
 			root["D11"] = this->D11;
-			root["D12"] = this->D12;
-			root["D22"] = this->D22;
+			if (!preferences.one_kind)
+			{
+				root["D12"] = this->D12;
+				root["D22"] = this->D22;
+			}
 		}
 		root["y11"] = this->y11;
-		root["y12"] = this->y12;
-		root["y21"] = this->y21;
-		root["y22"] = this->y22;
+		if (!preferences.one_kind)
+		{
+			root["y12"] = this->y12;
+			root["y21"] = this->y21;
+			root["y22"] = this->y22;
+			root["N2"] = this->N2;
+		}
 		root["N1"] = this->N1;
-		root["N2"] = this->N2;
 		return root;
 	}
 };
