@@ -153,6 +153,8 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 		prev_err = err;
 		N1 = N1_new;
 		N2 = N2_new;
+
+		g_iterations_count++;
 	}
 	// collect results
 	result.D11 = D11; result.D12 = D12; result.D22 = D22;

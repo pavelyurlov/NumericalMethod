@@ -1,5 +1,7 @@
 #pragma once
 
+#include "minitypes.h"
+
 const struct
 {
 	bool print_D = false; // печатать ли длинные выходные данные?
@@ -7,3 +9,4 @@ const struct
 } preferences;
 
 extern MatlabVector g_rh; // вектор координат точек
+extern uint g_iterations_count; // количество работы, лог
