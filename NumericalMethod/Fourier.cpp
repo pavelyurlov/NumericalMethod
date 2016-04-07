@@ -7,7 +7,11 @@
 #include <mkl.h>
 #include <mkl_dfti.h>
 
+#include "Preferences.h"
+#include <specialfunctions.h>
 
+// быстрое одномерное преобразование Фурье векторов a и b ака численно заданных функций
+// вектор a и вектор b должны быть одинакового размера
 MatlabVector conv_fourier_lib(MatlabVector a, MatlabVector b)
 {
 	static uint size_a = 0, size_b = 0;
@@ -69,7 +73,36 @@ MatlabVector conv_fourier_lib(MatlabVector a, MatlabVector b)
 	return res;
 }
 
+// прямое преобразование Ханкеля
+MatlabVector hankel_2D_direct(MatlabVector f)
+{
+	MatlabVector res(f.size());
+	for (uint i = 0; i < res.size(); i++)
+	{
+		res[i] = 0;
+		MatlabVector tmp = g_rh * f;
+		for (uint j = 0; j < tmp.size(); j++)
+		{
+			res[i] += tmp[j] * alglib::besselj0((g_rh)[j] * (g_rh)[i]);
+		}
+	}
+	return res;
+}
+
+// двумерное преобразование Фурье радиально-симметричных функций
+// середина входного вектора считается точкой ноль
+MatlabVector conv_radial_2D(MatlabVector a, MatlabVector b)
+{
+	MatlabVector res;
+	// res = \frac{ 1 }{2\pi} H[(2\pi) ^ 2 H[f] \cdot H[g]]
+	// so, we need H
+	res = hankel_2D_direct(hankel_2D_direct(a) * hankel_2D_direct(b) * 4 * M_PI * M_PI) * (1 / (2 * M_PI));
+	return res;
+}
+
+// внешний "интерфейс"
+// основная программа вызывает эту функцию
 MatlabVector conv(MatlabVector a, MatlabVector b, int) // int в конце несущественнен
 {
-	return conv_fourier_lib(a, b);
+	return conv_radial_2D(a, b);
 }

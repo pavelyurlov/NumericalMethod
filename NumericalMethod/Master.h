@@ -32,6 +32,8 @@ void count_input(std::vector<InputSet> input_array)
 			newborn["Output"] = solve_iter_sym(input_array[i]);
 			root.append(newborn);
 			newborn.clear(); // too paranoic?
+
+			std::cout << "pr#" << mpi_rank << ": " << (float)i / input_array.size() << std::endl;
 		}
 	}
 
