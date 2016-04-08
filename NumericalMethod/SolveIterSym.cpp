@@ -18,6 +18,24 @@ extern OutputSet solve_iter_sym_one_kind(num A, uint N, uint max_iter, num a, nu
 
 MatlabVector g_rh;
 
+num count_integral(MatlabVector a, MatlabVector b, num h)
+{
+	// one dimention
+	/*MatlabVector tmp = a*b;
+	num res = h * std::accumulate(tmp.begin(), tmp.end(), 0.0);
+	return res;*/
+
+	// two dimentions
+	MatlabVector tmp = a*b;
+	num res = 0;
+	for (uint i = 0; i < tmp.size(); i++)
+	{
+		res += tmp[i] * std::abs(static_cast<int>(tmp.size() / 2 - i));
+	}
+	res *= h * M_PI;
+	return res;
+}
+
 // надо убрать повторяющийся блок кода в collecting results. Макросы?
 OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12, num sw21, num sw22, num sm1, num sm2, num b1, num b2, num d1, num d2, num d11, num d12, num d21, num d22)
 {
@@ -75,11 +93,8 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 		// 0,25 секунд с библиотекой fftw
 		// мораль очевидна :D
 
-		MatlabVector tmp = w12*D12;
-		y12 = h * std::accumulate(tmp.begin(), tmp.end(), 0.0) + d12;
-
-		tmp = w21*D12;
-		y21 = h * std::accumulate(tmp.begin(), tmp.end(), 0.0) + d21;
+		y12 = count_integral(w12, D12, h) + d12;
+		y21 = count_integral(w21, D12, h) + d21;
 
 		if (isnan(y12) || isnan(y21))
 		{
@@ -110,10 +125,8 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 		second = w22 + (1 - a / 2)*b2 + (a / 2)*(d2 + N2*d22 + N1*d21);
 		D22 = first / second;
 
-		tmp = w11*D11;
-		y11 = h * std::accumulate(tmp.begin(), tmp.end(), 0.0) + d11;
-		tmp = w22*D22;
-		y22 = h * std::accumulate(tmp.begin(), tmp.end(), 0.0) + d22;
+		y11 = count_integral(w11, D11, h) + d11;
+		y22 = count_integral(w22, D22, h) + d22;
 
 		if (isnan(y11) || isnan(y11))
 		{
