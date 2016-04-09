@@ -9,6 +9,7 @@
 
 #include "Preferences.h"
 #include <specialfunctions.h>
+#include <gsl\gsl_dht.h>
 
 // быстрое одномерное преобразование Фурье векторов a и b ака численно заданных функций
 // вектор a и вектор b должны быть одинакового размера
@@ -89,6 +90,45 @@ MatlabVector hankel_2D_direct(MatlabVector f)
 	return res;
 }
 
+MatlabVector hankel_2D_gsl(MatlabVector f)
+{
+	static uint the_size = 0; // /2
+	static gsl_dht *the_dht;
+	static double *the_in;
+	static double *the_out;
+
+	MatlabVector res = MatlabVector(f.size());
+
+	if (the_size != 0 && the_size != f.size())
+	{
+		gsl_dht_free(the_dht);
+		the_size = 0;
+		delete the_in;
+		delete the_out;
+	}
+
+	if (the_size == 0)
+	{
+		the_size = f.size();
+		the_dht = gsl_dht_new(the_size / 2 + the_size % 2, 0, g_A);
+		the_in = new double[the_size / 2 + the_size % 2];
+		the_out = new double[the_size / 2 + the_size % 2];
+	}
+
+	for (int i = 0; i < the_size / 2 + the_size % 2; i++)
+	{
+		the_in[the_size / 2 + the_size % 2 - i - 1] = f[i];
+	}
+
+	gsl_dht_apply(the_dht, the_in, the_out);
+
+	for (int i = 0; i < the_size / 2 + the_size % 2; i++)
+	{
+		res[the_size / 2 + the_size % 2 - i - 1] = res[the_size / 2 + i] = the_out[i];
+	}
+	return res;
+}
+
 // двумерное преобразование Фурье радиально-симметричных функций
 // середина входного вектора считается точкой ноль
 MatlabVector conv_radial_2D(MatlabVector a, MatlabVector b)
@@ -96,7 +136,7 @@ MatlabVector conv_radial_2D(MatlabVector a, MatlabVector b)
 	MatlabVector res;
 	// res = \frac{ 1 }{2\pi} H[(2\pi) ^ 2 H[f] \cdot H[g]]
 	// so, we need H
-	res = hankel_2D_direct(hankel_2D_direct(a) * hankel_2D_direct(b) * 4 * M_PI * M_PI) * (1 / (2 * M_PI));
+	res = hankel_2D_gsl(hankel_2D_gsl(a) * hankel_2D_gsl(b) * 4 * M_PI * M_PI) * (1 / (2 * M_PI));
 	return res;
 }
 

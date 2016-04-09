@@ -17,6 +17,7 @@ MatlabVector conv(MatlabVector a, MatlabVector b, int);
 extern OutputSet solve_iter_sym_one_kind(num A, uint N, uint max_iter, num a, num sw11, num sw12, num sw21, num sw22, num sm1, num sm2, num b1, num b2, num d1, num d2, num d11, num d12, num d21, num d22);
 
 MatlabVector g_rh;
+num g_A;
 
 num count_integral(MatlabVector a, MatlabVector b, num h)
 {
@@ -44,6 +45,7 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 	// precount functions
 	MatlabVector rh = linspace(-A, A, N);
 	g_rh = rh;
+	g_A = A;
 	num h = rh[2] - rh[1];
 
 	MatlabVector m1 = precount_func(b1, sm1, N, rh);
