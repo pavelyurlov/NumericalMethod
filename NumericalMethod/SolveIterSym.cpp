@@ -40,7 +40,11 @@ num count_integral(MatlabVector a, MatlabVector b, num h)
 	}
 }
 
-// надо убрать повторяющийся блок кода в collecting results. Макросы?
+
+#define COLLECT_RESULTS_MAKROS result.D11 = D11; result.D12 = D12; result.D22 = D22; \
+result.N1 = N1; result.N2 = N2; result.rh = rh; \
+result.y11 = y11; result.y12 = y12; result.y21 = y21; result.y22 = y22
+
 OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12, num sw21, num sw22, num sm1, num sm2, num b1, num b2, num d1, num d2, num d11, num d12, num d21, num d22)
 {
 	OutputSet result;
@@ -76,11 +80,7 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 	// count
 	for (uint i = 0; i < max_iter; i++)
 	{
-		// collect results
-		result.D11 = D11; result.D12 = D12; result.D22 = D22;
-		result.N1 = N1; result.N2 = N2; result.rh = rh;
-		result.y11 = y11; result.y12 = y12; result.y21 = y21; result.y22 = y22;
-		// end collect results
+		COLLECT_RESULTS_MAKROS;
 		//std::cout << result;
 
 		MatlabVector test = m1 * m2;
@@ -107,11 +107,7 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 			y12 = NAN;
 			y21 = NAN;
 			y22 = NAN;
-			// collect results
-			result.D11 = D11; result.D12 = D12; result.D22 = D22;
-			result.N1 = N1; result.N2 = N2; result.rh = rh;
-			result.y11 = y11; result.y12 = y12; result.y21 = y21; result.y22 = y22;
-			// end collect results
+			COLLECT_RESULTS_MAKROS;
 			return result;
 		}
 
@@ -139,11 +135,7 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 			y12 = NAN;
 			y21 = NAN;
 			y22 = NAN;
-			// collect results
-			result.D11 = D11; result.D12 = D12; result.D22 = D22;
-			result.N1 = N1; result.N2 = N2; result.rh = rh;
-			result.y11 = y11; result.y12 = y12; result.y21 = y21; result.y22 = y22;
-			// end collect results
+			COLLECT_RESULTS_MAKROS;
 			return result;
 		}
 
@@ -160,11 +152,7 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 				y21 = NAN;
 				y22 = NAN;
 			}
-			// collect results
-			result.D11 = D11; result.D12 = D12; result.D22 = D22;
-			result.N1 = N1; result.N2 = N2; result.rh = rh;
-			result.y11 = y11; result.y12 = y12; result.y21 = y21; result.y22 = y22;
-			// end collect results
+			COLLECT_RESULTS_MAKROS;
 			return result;
 		}
 
@@ -174,11 +162,7 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 
 		g_iterations_count++;
 	}
-	// collect results
-	result.D11 = D11; result.D12 = D12; result.D22 = D22;
-	result.N1 = N1; result.N2 = N2; result.rh = rh;
-	result.y11 = y11; result.y12 = y12; result.y21 = y21; result.y22 = y22;
-	// end collect results
+	COLLECT_RESULTS_MAKROS;
 	return result;
 }
 
