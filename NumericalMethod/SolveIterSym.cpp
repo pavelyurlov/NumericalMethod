@@ -21,20 +21,23 @@ num g_A;
 
 num count_integral(MatlabVector a, MatlabVector b, num h)
 {
-	// one dimention
-	/*MatlabVector tmp = a*b;
-	num res = h * std::accumulate(tmp.begin(), tmp.end(), 0.0);
-	return res;*/
-
-	// two dimentions
 	MatlabVector tmp = a*b;
 	num res = 0;
-	for (uint i = 0; i < tmp.size(); i++)
+	switch (preferences.dimentions)
 	{
-		res += tmp[i] * std::abs(static_cast<int>(tmp.size() / 2 - i));
+	case 1:
+		res = h * std::accumulate(tmp.begin(), tmp.end(), 0.0);
+		return res;
+	case 2:
+		for (uint i = 0; i < tmp.size(); i++)
+		{
+			res += tmp[i] * std::abs(static_cast<int>(tmp.size() / 2 - i));
+		}
+		res *= h * M_PI;
+		return res;
+	default:
+		throw 124;
 	}
-	res *= h * M_PI;
-	return res;
 }
 
 // надо убрать повторяющийся блок кода в collecting results. Макросы?

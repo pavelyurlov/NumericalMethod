@@ -144,5 +144,13 @@ MatlabVector conv_radial_2D(MatlabVector a, MatlabVector b)
 // основная программа вызывает эту функцию
 MatlabVector conv(MatlabVector a, MatlabVector b, int) // int в конце несущественнен
 {
-	return conv_radial_2D(a, b);
+	switch (preferences.dimentions)
+	{
+	case 1:
+		return conv_fourier_lib(a, b);
+	case 2:
+		return conv_radial_2D(a, b);
+	default:
+		throw 123;
+	}
 }
