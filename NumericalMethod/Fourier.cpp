@@ -155,6 +155,22 @@ MatlabVector conv_1d_mkl(MatlabVector a, MatlabVector b)
 	return res;
 }
 
+MatlabVector conv_2d_mkl(MatlabVector a, MatlabVector b)
+{
+	static uint size_a = 0, size_b = 0;
+	static VSLConvTaskPtr convolution_ptr = NULL;
+	int shape[2] = { g_N , 1 };
+	if (size_a != a.size() || size_b != b.size())
+	{
+		size_a = a.size(); size_b = b.size();
+		vslConvDeleteTask(&convolution_ptr); // утечки?
+		vsldConvNewTask(&convolution_ptr, VSL_CONV_MODE_AUTO, 2, shape, shape, shape);
+	}
+	MatlabVector res = a;
+	vsldConvExec(convolution_ptr, a.data(), shape, b.data(), shape, res.data(), shape);
+	return res;
+}
+
 // внешний "интерфейс"
 // основная программа вызывает эту функцию
 MatlabVector conv(MatlabVector a, MatlabVector b, int) // int в конце несущественнен
@@ -164,7 +180,7 @@ MatlabVector conv(MatlabVector a, MatlabVector b, int) // int в конце несуществе
 	case 1:
 		return conv_1d_mkl(a, b);
 	case 2:
-		return conv_radial_2D(a, b);
+		return conv_2d_mkl(a, b);
 	default:
 		throw 123;
 	}

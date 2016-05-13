@@ -17,6 +17,7 @@ MatlabVector MatlabVector::per_member_op(num a, num(*op)(num, num))
 	return result;
 }
 
+//Ок, почему эти операторы летают в воздухе? Разве не должно быть MatlabVector::operator?
 MatlabVector operator*(num n, MatlabVector mv) { return mv*n; }
 
 MatlabVector operator+(MatlabVector a, MatlabVector b)

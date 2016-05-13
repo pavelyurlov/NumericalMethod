@@ -18,26 +18,13 @@ extern OutputSet solve_iter_sym_one_kind(num A, uint N, uint max_iter, num a, nu
 
 MatlabVector g_rh;
 num g_A;
+uint g_N;
 
 num count_integral(MatlabVector a, MatlabVector b, num h)
 {
 	MatlabVector tmp = a*b;
-	num res = 0;
-	switch (preferences.dimentions)
-	{
-	case 1:
-		res = h * std::accumulate(tmp.begin(), tmp.end(), 0.0);
-		return res;
-	case 2:
-		for (uint i = 0; i < tmp.size(); i++)
-		{
-			res += tmp[i] * std::abs(static_cast<int>(tmp.size() / 2 - i));
-		}
-		res *= h * M_PI;
-		return res;
-	default:
-		throw 124;
-	}
+	num res = h * std::accumulate(tmp.begin(), tmp.end(), 0.0);
+	return res;
 }
 
 
@@ -53,7 +40,9 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 	MatlabVector rh = linspace(-A, A, N);
 	g_rh = rh;
 	g_A = A;
-	num h = rh[2] - rh[1];
+	g_N = N;
+	num h = 2 * A / N;
+	if (preferences.dimentions == 2) h *= 2 * A / N;
 
 	MatlabVector m1 = precount_func(b1, sm1, N, rh);
 	MatlabVector m2 = precount_func(b2, sm2, N, rh);
@@ -63,9 +52,9 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 	MatlabVector w22 = precount_func(d22, sw22, N, rh);
 
 	// init
-	MatlabVector D11 = MatlabVector(N); std::fill(D11.begin(), D11.end(), 0);
-	MatlabVector D12 = MatlabVector(N); std::fill(D12.begin(), D12.end(), 0);
-	MatlabVector D22 = MatlabVector(N); std::fill(D22.begin(), D22.end(), 0);
+	MatlabVector D11 = MatlabVector(rh.size()); std::fill(D11.begin(), D11.end(), 0);
+	MatlabVector D12 = MatlabVector(rh.size()); std::fill(D12.begin(), D12.end(), 0);
+	MatlabVector D22 = MatlabVector(rh.size()); std::fill(D22.begin(), D22.end(), 0);
 
 	num y11 = d11;
 	num y12 = d12;
@@ -184,22 +173,43 @@ void swap(T &a, T &b)
 
 MatlabVector precount_func(num param, num sigma, uint N, MatlabVector &rh)
 {
-	MatlabVector result = MatlabVector(N);
-	for (uint i = 0; i < N; i++)
+	uint number = rh.size();
+	MatlabVector result = MatlabVector(number);
+	for (uint i = 0; i < number; i++)
 	{
 		result[i] = param * normpdf_checked(rh[i], sigma, 1);
 	}
 	return result;
 }
 
+// в одномерном случае - линейное пространство
+// в двумерном - 0 в центре, end снаружи
 MatlabVector linspace(num start, num end, uint n_points)
 {
 	if (start > end) swap(start, end);
 	num step = (end - start) / n_points;
 	MatlabVector result = MatlabVector(n_points);
+	if (preferences.dimentions == 1)
+	{
+		result = MatlabVector(n_points);
+	}
+	else
+	{
+		result = MatlabVector(n_points*n_points);
+	}
 	for (uint i = 0; i < n_points; i++)
 	{
-		result[i] = start + step * i;
+		if (preferences.dimentions == 1)
+		{
+			result[i] = start + step * i;
+		}
+		else
+		{
+			for (uint j = 0; j < n_points; j++)
+			{
+				result[i*n_points + j] = sqrt((n_points - i)*(n_points - i) + (n_points - j)*(n_points - j)) * end / n_points;
+			}
+		}
 	}
 	return result;
 }

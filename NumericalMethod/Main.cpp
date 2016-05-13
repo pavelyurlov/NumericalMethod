@@ -28,7 +28,7 @@ int main(int cmdn, char* cmd[])
 	is.d1 = 0.2; is.d2 = 0.2;
 
 	//----------Grid settings----------
-	is.N = 2048;
+	is.N = 256;
 	is.A = 1;
 
 	//-------- - Numerical method Constants------ -
