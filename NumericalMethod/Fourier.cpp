@@ -140,6 +140,21 @@ MatlabVector conv_radial_2D(MatlabVector a, MatlabVector b)
 	return res;
 }
 
+MatlabVector conv_1d_mkl(MatlabVector a, MatlabVector b)
+{
+	static uint size_a = 0, size_b = 0;
+	static VSLConvTaskPtr convolution_ptr = NULL;
+	if (size_a != a.size() || size_b != b.size())
+	{
+		size_a = a.size(); size_b = b.size();
+		vslConvDeleteTask(&convolution_ptr); // утечки?
+		vsldConvNewTask1D(&convolution_ptr, VSL_CONV_MODE_AUTO, size_a, size_b, size_a);
+	}
+	MatlabVector res = a;
+	vsldConvExec1D(convolution_ptr, a.data(), 1, b.data(), 1, res.data(), 1);
+	return res;
+}
+
 // внешний "интерфейс"
 // основная программа вызывает эту функцию
 MatlabVector conv(MatlabVector a, MatlabVector b, int) // int в конце несущественнен
@@ -147,7 +162,7 @@ MatlabVector conv(MatlabVector a, MatlabVector b, int) // int в конце несуществе
 	switch (preferences.dimentions)
 	{
 	case 1:
-		return conv_fourier_lib(a, b);
+		return conv_1d_mkl(a, b);
 	case 2:
 		return conv_radial_2D(a, b);
 	default:
