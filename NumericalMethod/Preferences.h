@@ -4,7 +4,7 @@
 
 const struct
 {
-	bool print_D = false; // печатать ли длинные выходные данные?
+	bool print_D = true; // печатать ли длинные выходные данные?
 	bool one_kind = false;
 	uint dimentions = 2; // не работает в случае одного вида
 } preferences;

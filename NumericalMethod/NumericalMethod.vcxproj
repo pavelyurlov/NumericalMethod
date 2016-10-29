@@ -156,6 +156,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="InputParser.h" />
     <ClInclude Include="IOSets.h" />
     <ClInclude Include="Master.h" />
     <ClInclude Include="MatlabVector.h" />
@@ -165,6 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Fourier.cpp" />
+    <ClCompile Include="InputParser.cpp" />
     <ClCompile Include="IOSets.cpp" />
     <ClCompile Include="jsoncpp.cpp" />
     <ClCompile Include="Main.cpp" />

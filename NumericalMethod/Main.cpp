@@ -1,6 +1,7 @@
 // "solve_nonlinear_correct.m"
 
 #include "IOSets.h"
+#include "InputParser.h"
 #include "Master.h"
 #include <iostream>
 #include <mpi.h>
@@ -17,39 +18,7 @@ int main(int cmdn, char* cmd[])
 
 	std::cout << "Process " << rank << ", total proc count: " << size << std::endl;
 
-
-	InputSet is;
-
-	//---------- - Model Constants--------
-	is.sm1 = 0.04, is.sm2 = 0.06;
-	is.b1 = 0.4; is.b2 = 0.4;
-	is.d11 = 0.001;  is.d22 = 0.001; is.d12 = 0.001; is.d21 = 0.001;
-	is.sw11 = 0.04, is.sw22 = 0.04, is.sw12 = 0.04, is.sw21 = 0.04;
-	is.d1 = 0.2; is.d2 = 0.2;
-
-	//----------Grid settings----------
-	is.N = 256;
-	is.A = 1;
-
-	//-------- - Numerical method Constants------ -
-	is.max_iter = 500;
-
-	//-------- - Closure Constants------ -
-	is.a = 0.4;
-
-
-
-	std::vector<InputSet> input;
-
-
-	for (num d12 = 0; d12 < 0.001; d12 += 0.001 * 0.01)
-		for (num sm2 = 0; sm2 < 0.16; sm2 += 0.16 * 0.01)
-		{
-			is.d12 = d12;
-			is.sm2 = sm2;
-			input.push_back(is);
-		}
-
+	std::vector<InputSet> input = InputParser::Parse("input.json");
 
 	count_input(input);
 
