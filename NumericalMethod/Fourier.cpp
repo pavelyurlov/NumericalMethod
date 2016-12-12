@@ -186,6 +186,8 @@ MatlabVector conv(MatlabVector a, MatlabVector b, int) // int в конце несуществе
 		return conv_1d_mkl(a, b);
 	case 2:
 		return conv_2d_mkl(a, b);
+	case 3:
+		return conv_3d(a, b);
 	default:
 		throw 123;
 	}

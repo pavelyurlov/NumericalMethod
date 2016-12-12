@@ -193,9 +193,13 @@ MatlabVector linspace(num start, num end, uint n_points)
 	{
 		result = MatlabVector(n_points);
 	}
-	else
+	else if (preferences.dimentions == 2)
 	{
 		result = MatlabVector(n_points*n_points);
+	}
+	else if (preferences.dimentions == 3)
+	{
+		result = MatlabVector(n_points);
 	}
 	for (uint i = 0; i < n_points; i++)
 	{
@@ -203,12 +207,16 @@ MatlabVector linspace(num start, num end, uint n_points)
 		{
 			result[i] = start + step * i;
 		}
-		else
+		else if (preferences.dimentions == 2)
 		{
 			for (uint j = 0; j < n_points; j++)
 			{
 				result[i*n_points + j] = sqrt((n_points - i)*(n_points - i) + (n_points - j)*(n_points - j)) * end / n_points;
 			}
+		}
+		else if (preferences.dimentions == 3)
+		{
+			result[i] = start + step * i;
 		}
 	}
 	return result;
