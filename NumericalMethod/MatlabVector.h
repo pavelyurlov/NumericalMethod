@@ -18,6 +18,7 @@ public:
 	MatlabVector operator+(num a);
 	MatlabVector operator*(num a);
 	operator Json::Value() const;
+	MatlabVector getModule();
 private:
 	MatlabVector per_member_op(MatlabVector&, num(*op)(num, num));
 	MatlabVector per_member_op(num, num(*op)(num, num));

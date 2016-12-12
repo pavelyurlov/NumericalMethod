@@ -171,6 +171,11 @@ MatlabVector conv_2d_mkl(MatlabVector a, MatlabVector b)
 	return res;
 }
 
+MatlabVector conv_3d(MatlabVector a, MatlabVector b)
+{
+	return 4pi * conv_1d_mkl(ra, g);
+}
+
 // внешний "интерфейс"
 // основная программа вызывает эту функцию
 MatlabVector conv(MatlabVector a, MatlabVector b, int) // int в конце несущественнен
