@@ -173,7 +173,7 @@ MatlabVector conv_2d_mkl(MatlabVector a, MatlabVector b)
 
 MatlabVector conv_3d(MatlabVector a, MatlabVector b)
 {
-	return 4pi * conv_1d_mkl(ra, g);
+	return 4 * M_PI * conv_1d_mkl(g_rh.getModule() * a, b); // [f *** g] = 4pi [(rf) * g]
 }
 
 // внешний "интерфейс"
