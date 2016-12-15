@@ -11,8 +11,9 @@ public:
 	static const int MINUS	= 1;
 	static const int MULT	= 2;
 	static const int DIV	= 3;
+	static num Zero(num r);
 
-	RadialDistribution(uint dimentions, uint numOfPoints, num distBetwZeroAndEdge);
+	RadialDistribution(uint dimentions, uint numOfPoints, num distBetwZeroAndEdge, num (*initFunc)(num) = Zero);
 	~RadialDistribution();
 
 	RadialDistribution friend operator+(RadialDistribution a, RadialDistribution b);

@@ -7,11 +7,12 @@
 
 
 
-RadialDistribution::RadialDistribution(uint dimentions, uint numOfPoints, num distBetwZeroAndEdge)
+RadialDistribution::RadialDistribution(uint dimentions, uint numOfPoints, num distBetwZeroAndEdge, num(*initFunc)(num) = Zero)
 {
 	m_dim = dimentions;
 	m_dist = distBetwZeroAndEdge;
 	m_data = std::vector<num>(numOfPoints);
+	for (uint i = 0; i < getNumOfPoints(); i++) { m_data[i] = initFunc(getCoord(i)); }
 }
 
 RadialDistribution::~RadialDistribution()
@@ -90,3 +91,5 @@ RadialDistribution RadialDistribution::operationWithNumber(num a, int type)
 	}
 	return result;
 }
+
+num RadialDistribution::Zero(num r) { return 0; }
