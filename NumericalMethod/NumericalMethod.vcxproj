@@ -162,6 +162,7 @@
     <ClInclude Include="minitypes.h" />
     <ClInclude Include="normpdf_checked.h" />
     <ClInclude Include="Preferences.h" />
+    <ClInclude Include="RadialDistribution.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Fourier.cpp" />
@@ -169,6 +170,7 @@
     <ClCompile Include="jsoncpp.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MatlabVector.cpp" />
+    <ClCompile Include="RadialDistribution.cpp" />
     <ClCompile Include="SolveIterSym.cpp" />
     <ClCompile Include="SolveIterSymOneKind.cpp" />
   </ItemGroup>

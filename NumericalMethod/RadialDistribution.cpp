@@ -7,9 +7,10 @@
 
 
 
-RadialDistribution::RadialDistribution(uint dimentions, uint numOfPoints)
+RadialDistribution::RadialDistribution(uint dimentions, uint numOfPoints, num distBetwZeroAndEdge)
 {
 	m_dim = dimentions;
+	m_dist = distBetwZeroAndEdge;
 	m_data = std::vector<num>(numOfPoints);
 }
 
@@ -51,6 +52,10 @@ num count_one_dim_int(std::vector<num> &vec, num step)
 }
 
 uint RadialDistribution::getNumOfPoints() { return m_data.size(); }
+
+num RadialDistribution::getStepBetweenPoints() { return (m_dist * 2) / getNumOfPoints(); }
+
+num RadialDistribution::getCoord(uint index) { return -m_dist + getStepBetweenPoints() * index; }
 
 RadialDistribution operationPerMember(RadialDistribution a, RadialDistribution b, int type)
 {

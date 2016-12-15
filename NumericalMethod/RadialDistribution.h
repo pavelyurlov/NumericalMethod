@@ -12,7 +12,7 @@ public:
 	static const int MULT	= 2;
 	static const int DIV	= 3;
 
-	RadialDistribution(uint dimentions, uint numOfPoints);
+	RadialDistribution(uint dimentions, uint numOfPoints, num distBetwZeroAndEdge);
 	~RadialDistribution();
 
 	RadialDistribution friend operator+(RadialDistribution a, RadialDistribution b);
@@ -26,6 +26,7 @@ public:
 private:
 	std::vector<num> m_data;
 	uint m_dim;
+	num m_dist; // размер одной половины
 
 	uint getNumOfPoints();
 	num getStepBetweenPoints();
