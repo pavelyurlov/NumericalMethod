@@ -78,7 +78,7 @@ RadialDistribution operationPerMember(RadialDistribution a, RadialDistribution b
 
 RadialDistribution RadialDistribution::operationWithNumber(num a, int type)
 {
-	RadialDistribution result = RadialDistribution(m_dim, getNumOfPoints());
+	RadialDistribution result = RadialDistribution(m_dim, getNumOfPoints(), m_dist);
 	for (uint i = 0; i < m_data.size(); i++)
 	{
 		switch (type)
