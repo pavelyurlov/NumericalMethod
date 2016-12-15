@@ -8,6 +8,7 @@
 #include <iostream>
 #include "minitypes.h"
 #include "MatlabVector.h"
+#include "RadialDistribution.h"
 #include "IOSets.h"
 #include "normpdf_checked.h"
 
@@ -19,6 +20,9 @@ extern OutputSet solve_iter_sym_one_kind(num A, uint N, uint max_iter, num a, nu
 MatlabVector g_rh;
 num g_A;
 uint g_N;
+
+// TODO: превратить SolveIterSym в полноценный класс
+static InputSet gs_is;
 
 num count_integral(MatlabVector a, MatlabVector b, num h)
 {
@@ -45,17 +49,17 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 	if (preferences.dimentions == 2) h = h*h;
 	if (preferences.dimentions == 3) h = h*h*h;
 
-	MatlabVector m1 = precount_func(b1, sm1, N, rh);
-	MatlabVector m2 = precount_func(b2, sm2, N, rh);
-	MatlabVector w11 = precount_func(d11, sw11, N, rh);
-	MatlabVector w21 = precount_func(d21, sw21, N, rh);
-	MatlabVector w12 = precount_func(d12, sw12, N, rh);
-	MatlabVector w22 = precount_func(d22, sw22, N, rh);
+	RadialDistribution m1 (preferences.dimentions, N, A, m1_init);
+	RadialDistribution m2 (preferences.dimentions, N, A, m2_init);
+	RadialDistribution w11(preferences.dimentions, N, A, w11_init);
+	RadialDistribution w12(preferences.dimentions, N, A, w12_init);
+	RadialDistribution w21(preferences.dimentions, N, A, w21_init);
+	RadialDistribution w22(preferences.dimentions, N, A, w22_init);
 
 	// init
-	MatlabVector D11 = MatlabVector(rh.size()); std::fill(D11.begin(), D11.end(), 0);
-	MatlabVector D12 = MatlabVector(rh.size()); std::fill(D12.begin(), D12.end(), 0);
-	MatlabVector D22 = MatlabVector(rh.size()); std::fill(D22.begin(), D22.end(), 0);
+	RadialDistribution D11(preferences.dimentions, N, A);
+	RadialDistribution D12(preferences.dimentions, N, A);
+	RadialDistribution D22(preferences.dimentions, N, A);
 
 	num y11 = d11;
 	num y12 = d12;
@@ -72,8 +76,6 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 	{
 		COLLECT_RESULTS_MAKROS;
 		//std::cout << result;
-
-		MatlabVector test = m1 * m2;
 
 		MatlabVector first = h * conv((m1 + m2), D12, 'same') - w21 - w12 -
 			((a / 2)*N1)*(h * (D12 + 2) * (conv(w11, D12, 'same') + conv(w21, D11, 'same')) +
@@ -158,6 +160,7 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 
 OutputSet solve_iter_sym(InputSet s)
 {
+	gs_is = s;
 	if (preferences.one_kind)
 		return solve_iter_sym_one_kind(s.A, s.N, s.max_iter, s.a, s.sw11, s.sw12, s.sw21, s.sw22, s.sm1, s.sm2, s.b1, s.b2, s.d1, s.d2, s.d11, s.d12, s.d21, s.d22);
 	else
@@ -182,6 +185,15 @@ MatlabVector precount_func(num param, num sigma, uint N, MatlabVector &rh)
 	}
 	return result;
 }
+
+num precount_func(num param, num sigma, uint N, num r) { return param * normpdf_checked(r, sigma, 1); }
+
+num m1_init(num r) { return precount_func(gs_is.b1, gs_is.sm1, gs_is.N, r); }
+num m2_init(num r) { return precount_func(gs_is.b2, gs_is.sm2, gs_is.N, r); }
+num w11_init(num r) { return precount_func(gs_is.d11, gs_is.sw11, gs_is.N, r); }
+num w12_init(num r) { return precount_func(gs_is.d12, gs_is.sw12, gs_is.N, r); }
+num w21_init(num r) { return precount_func(gs_is.d21, gs_is.sw21, gs_is.N, r); }
+num w22_init(num r) { return precount_func(gs_is.d22, gs_is.sw22, gs_is.N, r); }
 
 // в одномерном случае - линейное пространство
 // в двумерном - 0 в центре, end снаружи
