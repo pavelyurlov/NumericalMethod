@@ -42,7 +42,8 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 	g_A = A;
 	g_N = N;
 	num h = 2 * A / N;
-	if (preferences.dimentions == 2) h *= 2 * A / N;
+	if (preferences.dimentions == 2) h = h*h;
+	if (preferences.dimentions == 3) h = h*h*h;
 
 	MatlabVector m1 = precount_func(b1, sm1, N, rh);
 	MatlabVector m2 = precount_func(b2, sm2, N, rh);
@@ -199,7 +200,7 @@ MatlabVector linspace(num start, num end, uint n_points)
 	}
 	else if (preferences.dimentions == 3)
 	{
-		result = MatlabVector(n_points);
+		result = MatlabVector(n_points*n_points*n_points);
 	}
 	for (uint i = 0; i < n_points; i++)
 	{
@@ -215,7 +216,14 @@ MatlabVector linspace(num start, num end, uint n_points)
 			}
 		}
 		else if (preferences.dimentions == 3)
-		{
+		
+			for (uint j = 0; j < n_points; j++)
+			{
+				for (uint k = 0; k < n_points; k++)
+				{
+					result[i*n_points*n_points + j*n_points + k] = //sqrt((n_points - i)*(n_points - i) + (n_points - j)*(n_points - j)) * end / n_points;
+				}
+			}
 			result[i] = start + step * i;
 		}
 	}
