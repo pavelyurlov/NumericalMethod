@@ -1,5 +1,3 @@
-// "solve_nonlinear_correct.m"
-
 #include "IOSets.h"
 #include "Master.h"
 #include <iostream>
