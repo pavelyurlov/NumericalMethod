@@ -216,16 +216,20 @@ MatlabVector linspace(num start, num end, uint n_points)
 	}
 	for (uint i = 0; i < n_points; i++)
 	{
-		if (preferences.dimentions == 1)
+		if (preferences.dimentions == 1 || preferences.dimentions == 3)
 		{
 			result[i] = start + step * i;
 		}
-		else
+		else if (preferences.dimentions == 2)
 		{
 			for (uint j = 0; j < n_points; j++)
 			{
 				result[i*n_points + j] = sqrt((n_points - i)*(n_points - i) + (n_points - j)*(n_points - j)) * end / n_points;
 			}
+		}
+		else
+		{
+			throw 666;
 		}
 	}
 	return result;

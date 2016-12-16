@@ -6,7 +6,7 @@ const struct
 {
 	bool print_D = false; // печатать ли длинные выходные данные?
 	bool one_kind = false;
-	uint dimentions = 1; // не работает в случае одного вида
+	uint dimentions = 3; // не работает в случае одного вида
 } preferences;
 
 extern MatlabVector g_rh; // вектор координат точек
