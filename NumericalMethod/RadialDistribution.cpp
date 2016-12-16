@@ -6,8 +6,10 @@
 #include <math.h>
 
 
+num count_one_dim_int(std::vector<num> &vec, num step);
 
-RadialDistribution::RadialDistribution(uint dimentions, uint numOfPoints, num distBetwZeroAndEdge, num(*initFunc)(num) = Zero)
+
+RadialDistribution::RadialDistribution(uint dimentions, uint numOfPoints, num distBetwZeroAndEdge, num(*initFunc)(num))
 {
 	m_dim = dimentions;
 	m_dist = distBetwZeroAndEdge;
@@ -19,13 +21,16 @@ RadialDistribution::~RadialDistribution()
 {
 }
 
-RadialDistribution operator+(RadialDistribution a, RadialDistribution b) { operationPerMember(a, b, RadialDistribution::PLUS ); }
-RadialDistribution operator-(RadialDistribution a, RadialDistribution b) { operationPerMember(a, b, RadialDistribution::MINUS); }
-RadialDistribution operator*(RadialDistribution a, RadialDistribution b) { operationPerMember(a, b, RadialDistribution::MULT ); }
-RadialDistribution operator/(RadialDistribution a, RadialDistribution b) { operationPerMember(a, b, RadialDistribution::DIV  ); }
+RadialDistribution operator+(RadialDistribution a, RadialDistribution b) { return operationPerMember(a, b, RadialDistribution::PLUS ); }
+RadialDistribution operator-(RadialDistribution a, RadialDistribution b) { return operationPerMember(a, b, RadialDistribution::MINUS); }
+RadialDistribution operator*(RadialDistribution a, RadialDistribution b) { return operationPerMember(a, b, RadialDistribution::MULT ); }
+RadialDistribution operator/(RadialDistribution a, RadialDistribution b) { return operationPerMember(a, b, RadialDistribution::DIV  ); }
 
-RadialDistribution RadialDistribution::operator+(num a) { operationWithNumber(a, RadialDistribution::PLUS); }
-RadialDistribution RadialDistribution::operator*(num a) { operationWithNumber(a, RadialDistribution::MULT); }
+RadialDistribution RadialDistribution::operator+(num a) { return operationWithNumber(a, RadialDistribution::PLUS); }
+RadialDistribution RadialDistribution::operator*(num a) { return operationWithNumber(a, RadialDistribution::MULT); }
+
+RadialDistribution operator+(num a, RadialDistribution b) { return b + a; }
+RadialDistribution operator*(num a, RadialDistribution b) { return b * a; }
 
 num RadialDistribution::CountIntegral()
 {
@@ -62,7 +67,7 @@ RadialDistribution operationPerMember(RadialDistribution a, RadialDistribution b
 {
 	if (a.getNumOfPoints() != b.getNumOfPoints()) throw new std::string("[RadialDistribution.cpp -- operationPerMember] почленная операция над распределениями разного размера недопустима");
 	if (a.m_dim != b.m_dim) throw new std::string("[RadialDistribution.cpp -- operationPerMember] почленная операция над распределениями разных размерностей недопустима");
-	RadialDistribution result = RadialDistribution(a.m_dim, a.getNumOfPoints());
+	RadialDistribution result = RadialDistribution(a.m_dim, a.getNumOfPoints(), a.m_dist);
 	for (uint i = 0; i < a.m_data.size(); i++)
 	{
 		switch (type)

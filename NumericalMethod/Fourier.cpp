@@ -1,6 +1,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include "MatlabVector.h"
+#include "RadialDistribution.h"
 #include <complex>
 
 #include <mkl_types.h>
@@ -179,6 +180,21 @@ MatlabVector conv_3d(MatlabVector a, MatlabVector b)
 // внешний "интерфейс"
 // основная программа вызывает эту функцию
 MatlabVector conv(MatlabVector a, MatlabVector b, int) // int в конце несущественнен
+{
+	switch (preferences.dimentions)
+	{
+	case 1:
+		return conv_1d_mkl(a, b);
+	case 2:
+		return conv_2d_mkl(a, b);
+	case 3:
+		return conv_3d(a, b);
+	default:
+		throw 123;
+	}
+}
+
+RadialDistribution conv(RadialDistribution a, RadialDistribution b)
 {
 	switch (preferences.dimentions)
 	{

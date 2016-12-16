@@ -2,6 +2,7 @@
 
 #include "minitypes.h"
 #include "MatlabVector.h"
+#include "RadialDistribution.h"
 #include "./json/json.h"
 #include <iostream>
 #include "Preferences.h"
@@ -52,14 +53,13 @@ struct InputSet
 
 struct OutputSet
 {
-	MatlabVector rh, D11, D12, D22;
+	RadialDistribution D11, D12, D22;
 	num y11, y12, y21, y22, N1, N2;
 	operator Json::Value() const
 	{
 		Json::Value root;
 		if (preferences.print_D)
 		{
-			root["rh"] = this->rh;
 			root["D11"] = this->D11;
 			if (!preferences.one_kind)
 			{
@@ -78,6 +78,11 @@ struct OutputSet
 		root["N1"] = this->N1;
 		return root;
 	}
+
+	OutputSet(uint dimentions, uint numOfPoints, num distBetwZeroAndEdge) :
+		D11(dimentions, numOfPoints, distBetwZeroAndEdge),
+		D12(dimentions, numOfPoints, distBetwZeroAndEdge),
+		D22(dimentions, numOfPoints, distBetwZeroAndEdge) {}
 };
 
 std::ostream& operator<<(std::ostream&, OutputSet&);

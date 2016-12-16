@@ -9,7 +9,7 @@ const struct
 	uint dimentions = 3; // не работает в случае одного вида
 } preferences;
 
-extern MatlabVector g_rh; // вектор координат точек
+//extern MatlabVector g_rh; // вектор координат точек
 extern uint g_iterations_count; // количество работы, лог
 extern num g_A; // размеры области
 extern uint g_N; // количество точек на одной стороне

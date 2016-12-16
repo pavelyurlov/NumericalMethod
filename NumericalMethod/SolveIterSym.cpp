@@ -12,9 +12,8 @@
 #include "IOSets.h"
 #include "normpdf_checked.h"
 
-MatlabVector linspace(num start, num end, uint n_points);
 MatlabVector precount_func(num param, num sigma, uint N, MatlabVector &rh);
-MatlabVector conv(MatlabVector a, MatlabVector b, int);
+RadialDistribution conv(RadialDistribution a, RadialDistribution b);
 extern OutputSet solve_iter_sym_one_kind(num A, uint N, uint max_iter, num a, num sw11, num sw12, num sw21, num sw22, num sm1, num sm2, num b1, num b2, num d1, num d2, num d11, num d12, num d21, num d22);
 
 MatlabVector g_rh;
@@ -31,18 +30,24 @@ num count_integral(MatlabVector a, MatlabVector b, num h)
 	return res;
 }
 
+num precount_func(num param, num sigma, uint N, num r) { return param * normpdf_checked(r, sigma, 1); }
+
+num m1_init(num r) { return precount_func(gs_is.b1, gs_is.sm1, gs_is.N, r); }
+num m2_init(num r) { return precount_func(gs_is.b2, gs_is.sm2, gs_is.N, r); }
+num w11_init(num r) { return precount_func(gs_is.d11, gs_is.sw11, gs_is.N, r); }
+num w12_init(num r) { return precount_func(gs_is.d12, gs_is.sw12, gs_is.N, r); }
+num w21_init(num r) { return precount_func(gs_is.d21, gs_is.sw21, gs_is.N, r); }
+num w22_init(num r) { return precount_func(gs_is.d22, gs_is.sw22, gs_is.N, r); }
 
 #define COLLECT_RESULTS_MAKROS result.D11 = D11; result.D12 = D12; result.D22 = D22; \
-result.N1 = N1; result.N2 = N2; result.rh = rh; \
+result.N1 = N1; result.N2 = N2; \
 result.y11 = y11; result.y12 = y12; result.y21 = y21; result.y22 = y22
 
 OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12, num sw21, num sw22, num sm1, num sm2, num b1, num b2, num d1, num d2, num d11, num d12, num d21, num d22)
 {
-	OutputSet result;
+	OutputSet result(preferences.dimentions, N, A);
 
 	// precount functions
-	MatlabVector rh = linspace(-A, A, N);
-	g_rh = rh;
 	g_A = A;
 	g_N = N;
 	num h = 2 * A / N;
@@ -77,12 +82,12 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 		COLLECT_RESULTS_MAKROS;
 		//std::cout << result;
 
-		MatlabVector first = h * conv((m1 + m2), D12, 'same') - w21 - w12 -
-			((a / 2)*N1)*(h * (D12 + 2) * (conv(w11, D12, 'same') + conv(w21, D11, 'same')) +
-				h * conv(D11, w21*D12, 'same') + h * conv(D12, w11*D11, 'same')) -
-			(a / 2)*N2*(h * (D12 + 2) * (conv(w12, D22, 'same') + conv(w22, D12, 'same')) +
-				h * conv(D12, w22*D22, 'same') + h * conv(D22, w12*D12, 'same'));
-		MatlabVector second = w12 + w21 + (1 - a / 2)*(b1 + b2) + (a / 2)*(d1 + d2 + d11*N1 + d12*N2 + d21*N1 + d22*N2);
+		RadialDistribution first = h * conv((m1 + m2), D12) - w21 - w12 -
+			((a / 2)*N1)*(h * (D12 + 2) * (conv(w11, D12) + conv(w21, D11)) +
+				h * conv(D11, w21*D12) + h * conv(D12, w11*D11)) -
+			(a / 2)*N2*(h * (D12 + 2) * (conv(w12, D22) + conv(w22, D12)) +
+				h * conv(D12, w22*D22) + h * conv(D22, w12*D12));
+		RadialDistribution second = w12 + w21 + (1 - a / 2)*(b1 + b2) + (a / 2)*(d1 + d2 + d11*N1 + d12*N2 + d21*N1 + d22*N2);
 		D12 = first / second;
 		// 61 секунда при свёртке в лоб
 		// 549 секунд при свёртке с дискретным преобразованием Фурье (думаю, из-за экспонент)
@@ -90,8 +95,8 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 		// 0,25 секунд с библиотекой fftw
 		// мораль очевидна :D
 
-		y12 = count_integral(w12, D12, h) + d12;
-		y21 = count_integral(w21, D12, h) + d21;
+		y12 = (w12 * D12).CountIntegral() + d12;
+		y21 = (w21 * D12).CountIntegral() + d21;
 
 		if (isnan(y12) || isnan(y21))
 		{
@@ -106,20 +111,20 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 		N1 = ((b1 - d1)*y22 - (b2 - d2)*y12) / (y11*y22 - y12*y21);
 		N2 = ((b2 - d2)*y11 - (b1 - d1)*y21) / (y11*y22 - y12*y21);
 
-		first = (1 / N1) * m1 - w11 + h * conv(m1, D11, 'same') -
-			(a / 2)*N1*(h * (D11 + 2)*conv(w11, D11, 'same') + h * conv(D11, w11*D11, 'same')) -
-			(a / 2)*N2*(h * (D11 + 2)*conv(w12, D12, 'same') + h * conv(D12, w12*D12, 'same'));
+		first = (1 / N1) * m1 - w11 + h * conv(m1, D11) -
+			(a / 2)*N1*(h * (D11 + 2)*conv(w11, D11) + h * conv(D11, w11*D11)) -
+			(a / 2)*N2*(h * (D11 + 2)*conv(w12, D12) + h * conv(D12, w12*D12));
 		second = w11 + (1 - a / 2)*b1 + (a / 2)*(d1 + N1*d11 + N2*d12);
 		D11 = first / second;
 
-		first = (1 / N2) * m2 - w22 + h * conv(m2, D22, 'same') -
-			(a / 2)*N2*(h * (D22 + 2)*conv(w22, D22, 'same') + h * conv(D22, w22*D22, 'same')) -
-			(a / 2)*N1*(h * (D22 + 2)*conv(w21, D12, 'same') + h * conv(D12, w21*D12, 'same'));
+		first = (1 / N2) * m2 - w22 + h * conv(m2, D22) -
+			(a / 2)*N2*(h * (D22 + 2)*conv(w22, D22) + h * conv(D22, w22*D22)) -
+			(a / 2)*N1*(h * (D22 + 2)*conv(w21, D12) + h * conv(D12, w21*D12));
 		second = w22 + (1 - a / 2)*b2 + (a / 2)*(d2 + N2*d22 + N1*d21);
 		D22 = first / second;
 
-		y11 = count_integral(w11, D11, h) + d11;
-		y22 = count_integral(w22, D22, h) + d22;
+		y11 = (w11 * D11).CountIntegral() + d11;
+		y22 = (w22 * D22).CountIntegral() + d22;
 
 		if (isnan(y11) || isnan(y11))
 		{
@@ -182,62 +187,6 @@ MatlabVector precount_func(num param, num sigma, uint N, MatlabVector &rh)
 	for (uint i = 0; i < number; i++)
 	{
 		result[i] = param * normpdf_checked(rh[i], sigma, 1);
-	}
-	return result;
-}
-
-num precount_func(num param, num sigma, uint N, num r) { return param * normpdf_checked(r, sigma, 1); }
-
-num m1_init(num r) { return precount_func(gs_is.b1, gs_is.sm1, gs_is.N, r); }
-num m2_init(num r) { return precount_func(gs_is.b2, gs_is.sm2, gs_is.N, r); }
-num w11_init(num r) { return precount_func(gs_is.d11, gs_is.sw11, gs_is.N, r); }
-num w12_init(num r) { return precount_func(gs_is.d12, gs_is.sw12, gs_is.N, r); }
-num w21_init(num r) { return precount_func(gs_is.d21, gs_is.sw21, gs_is.N, r); }
-num w22_init(num r) { return precount_func(gs_is.d22, gs_is.sw22, gs_is.N, r); }
-
-// в одномерном случае - линейное пространство
-// в двумерном - 0 в центре, end снаружи
-MatlabVector linspace(num start, num end, uint n_points)
-{
-	if (start > end) swap(start, end);
-	num step = (end - start) / n_points;
-	MatlabVector result = MatlabVector(n_points);
-	if (preferences.dimentions == 1)
-	{
-		result = MatlabVector(n_points);
-	}
-	else if (preferences.dimentions == 2)
-	{
-		result = MatlabVector(n_points*n_points);
-	}
-	else if (preferences.dimentions == 3)
-	{
-		result = MatlabVector(n_points*n_points*n_points);
-	}
-	for (uint i = 0; i < n_points; i++)
-	{
-		if (preferences.dimentions == 1)
-		{
-			result[i] = start + step * i;
-		}
-		else if (preferences.dimentions == 2)
-		{
-			for (uint j = 0; j < n_points; j++)
-			{
-				result[i*n_points + j] = sqrt((n_points - i)*(n_points - i) + (n_points - j)*(n_points - j)) * end / n_points;
-			}
-		}
-		else if (preferences.dimentions == 3)
-		
-			for (uint j = 0; j < n_points; j++)
-			{
-				for (uint k = 0; k < n_points; k++)
-				{
-					result[i*n_points*n_points + j*n_points + k] = //sqrt((n_points - i)*(n_points - i) + (n_points - j)*(n_points - j)) * end / n_points;
-				}
-			}
-			result[i] = start + step * i;
-		}
 	}
 	return result;
 }

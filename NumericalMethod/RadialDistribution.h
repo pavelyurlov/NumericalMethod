@@ -22,6 +22,8 @@ public:
 	RadialDistribution friend operator/(RadialDistribution a, RadialDistribution b);
 	RadialDistribution operator+(num a);
 	RadialDistribution operator*(num a);
+	RadialDistribution friend operator+(num a, RadialDistribution b);
+	RadialDistribution friend operator*(num a, RadialDistribution b);
 	operator Json::Value() const;
 	num CountIntegral();
 private:

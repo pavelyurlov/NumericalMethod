@@ -79,7 +79,7 @@ MatlabVector::operator Json::Value() const
 MatlabVector MatlabVector::getModule()
 {
 	MatlabVector res = MatlabVector(this->size());
-	for (int i = 0; i < this->size(); i++)
+	for (uint i = 0; i < this->size(); i++)
 	{
 		res[i] = (*this)[i] * abs((*this)[i]);
 	}
