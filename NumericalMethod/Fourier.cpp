@@ -171,6 +171,11 @@ MatlabVector conv_2d_mkl(MatlabVector a, MatlabVector b)
 	return res;
 }
 
+MatlabVector conv_3d(MatlabVector a, MatlabVector b)
+{
+	return 4 * M_PI * conv_1d_mkl(g_rh.getModule() * a, b); // [f *** g] = 4pi [(rf) * g]
+}
+
 // внешний "интерфейс"
 // основная программа вызывает эту функцию
 MatlabVector conv(MatlabVector a, MatlabVector b, int) // int в конце несущественнен
@@ -181,6 +186,8 @@ MatlabVector conv(MatlabVector a, MatlabVector b, int) // int в конце несуществе
 		return conv_1d_mkl(a, b);
 	case 2:
 		return conv_2d_mkl(a, b);
+	case 3:
+		return conv_3d(a, b);
 	default:
 		throw 123;
 	}

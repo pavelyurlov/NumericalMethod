@@ -23,7 +23,20 @@ uint g_N;
 num count_integral(MatlabVector a, MatlabVector b, num h)
 {
 	MatlabVector tmp = a*b;
-	num res = h * std::accumulate(tmp.begin(), tmp.end(), 0.0);
+	num res;
+	if (preferences.dimentions == 3)
+	{
+		res = 0;
+		MatlabVector rh_mod = g_rh.getModule();
+		for (uint i = 0; i < g_N; i++)
+		{ 
+			res += 4 * M_PI * rh_mod[i] * rh_mod[i] * tmp[i] * h;
+		}
+	}
+	else
+	{
+		res = h * std::accumulate(tmp.begin(), tmp.end(), 0.0);
+	}
 	return res;
 }
 
@@ -189,13 +202,17 @@ MatlabVector linspace(num start, num end, uint n_points)
 	if (start > end) swap(start, end);
 	num step = (end - start) / n_points;
 	MatlabVector result = MatlabVector(n_points);
-	if (preferences.dimentions == 1)
+	if (preferences.dimentions == 1 || preferences.dimentions == 3)
 	{
 		result = MatlabVector(n_points);
 	}
-	else
+	else if (preferences.dimentions == 2)
 	{
 		result = MatlabVector(n_points*n_points);
+	}
+	else
+	{
+		throw 666;
 	}
 	for (uint i = 0; i < n_points; i++)
 	{
