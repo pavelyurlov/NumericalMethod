@@ -3,6 +3,7 @@
 #include "MatlabVector.h"
 #include "RadialDistribution.h"
 #include <complex>
+#include <string>
 
 #include <mkl_types.h>
 #include <mkl.h>
@@ -76,7 +77,7 @@ MatlabVector conv_fourier_lib(MatlabVector a, MatlabVector b)
 }
 
 // прямое преобразование Ханкеля
-MatlabVector hankel_2D_direct(MatlabVector f)
+/*MatlabVector hankel_2D_direct(MatlabVector f)
 {
 	MatlabVector res(f.size());
 	for (uint i = 0; i < res.size(); i++)
@@ -89,7 +90,7 @@ MatlabVector hankel_2D_direct(MatlabVector f)
 		}
 	}
 	return res;
-}
+}*/
 
 MatlabVector hankel_2D_gsl(MatlabVector f)
 {
@@ -141,59 +142,44 @@ MatlabVector conv_radial_2D(MatlabVector a, MatlabVector b)
 	return res;
 }
 
-MatlabVector conv_1d_mkl(MatlabVector a, MatlabVector b)
+RadialDistribution conv_1d_mkl(RadialDistribution a, RadialDistribution b)
 {
 	static uint size_a = 0, size_b = 0;
 	static VSLConvTaskPtr convolution_ptr = NULL;
-	if (size_a != a.size() || size_b != b.size())
+	if (size_a != a.GetNumOfPoints() || size_b != b.GetNumOfPoints())
 	{
-		size_a = a.size(); size_b = b.size();
+		size_a = a.GetNumOfPoints(); size_b = b.GetNumOfPoints();
 		vslConvDeleteTask(&convolution_ptr); // утечки?
 		vsldConvNewTask1D(&convolution_ptr, VSL_CONV_MODE_AUTO, size_a, size_b, size_a);
 	}
-	MatlabVector res = a;
-	vsldConvExec1D(convolution_ptr, a.data(), 1, b.data(), 1, res.data(), 1);
+	RadialDistribution res = a;
+	vsldConvExec1D(convolution_ptr, a.GetData(), 1, b.GetData(), 1, res.GetData(), 1);
 	return res;
 }
 
-MatlabVector conv_2d_mkl(MatlabVector a, MatlabVector b)
+RadialDistribution conv_2d_mkl(RadialDistribution a, RadialDistribution b)
 {
 	static uint size_a = 0, size_b = 0;
 	static VSLConvTaskPtr convolution_ptr = NULL;
 	int shape[2] = { g_N , 1 };
-	if (size_a != a.size() || size_b != b.size())
+	if (size_a != a.GetNumOfPoints() || size_b != b.GetNumOfPoints())
 	{
-		size_a = a.size(); size_b = b.size();
+		size_a = a.GetNumOfPoints(); size_b = b.GetNumOfPoints();
 		vslConvDeleteTask(&convolution_ptr); // утечки?
 		vsldConvNewTask(&convolution_ptr, VSL_CONV_MODE_AUTO, 2, shape, shape, shape);
 	}
-	MatlabVector res = a;
-	vsldConvExec(convolution_ptr, a.data(), shape, b.data(), shape, res.data(), shape);
+	RadialDistribution res = a;
+	vsldConvExec(convolution_ptr, a.GetData(), shape, b.GetData(), shape, res.GetData(), shape);
 	return res;
 }
 
-MatlabVector conv_3d(MatlabVector a, MatlabVector b)
+RadialDistribution conv_3d(RadialDistribution a, RadialDistribution b)
 {
-	return 4 * M_PI * conv_1d_mkl(g_rh.getModule() * a, b); // [f *** g] = 4pi [(rf) * g]
+	return 4 * M_PI * conv_1d_mkl(a.GetRadiusDistribution() * a, b); // [f *** g] = 4pi [(rf) * g]
 }
 
 // внешний "интерфейс"
 // основная программа вызывает эту функцию
-MatlabVector conv(MatlabVector a, MatlabVector b, int) // int в конце несущественнен
-{
-	switch (preferences.dimentions)
-	{
-	case 1:
-		return conv_1d_mkl(a, b);
-	case 2:
-		return conv_2d_mkl(a, b);
-	case 3:
-		return conv_3d(a, b);
-	default:
-		throw 123;
-	}
-}
-
 RadialDistribution conv(RadialDistribution a, RadialDistribution b)
 {
 	switch (preferences.dimentions)
@@ -205,6 +191,6 @@ RadialDistribution conv(RadialDistribution a, RadialDistribution b)
 	case 3:
 		return conv_3d(a, b);
 	default:
-		throw 123;
+		throw new std::string("[Fourier.cpp -- conv] неизвестная размерность");
 	}
 }

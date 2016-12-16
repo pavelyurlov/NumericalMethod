@@ -14,7 +14,7 @@ RadialDistribution::RadialDistribution(uint dimentions, uint numOfPoints, num di
 	m_dim = dimentions;
 	m_dist = distBetwZeroAndEdge;
 	m_data = std::vector<num>(numOfPoints);
-	for (uint i = 0; i < getNumOfPoints(); i++) { m_data[i] = initFunc(getCoord(i)); }
+	for (uint i = 0; i < GetNumOfPoints(); i++) { m_data[i] = initFunc(getCoord(i)); }
 }
 
 RadialDistribution::~RadialDistribution()
@@ -42,10 +42,10 @@ num RadialDistribution::CountIntegral()
 		res = count_one_dim_int(m_data, getStepBetweenPoints());
 		break;
 	case 2:
-		for (uint i = 0; i < getNumOfPoints(); i++) { res += 2 * M_PI * getCoord(i) * m_data[i] * getStepBetweenPoints(); }
+		for (uint i = 0; i < GetNumOfPoints(); i++) { res += 2 * M_PI * getCoord(i) * m_data[i] * getStepBetweenPoints(); }
 		break;
 	case 3:
-		for (uint i = 0; i < getNumOfPoints(); i++) { res += 4 * M_PI * getCoord(i) * getCoord(i) * m_data[i] * getStepBetweenPoints(); }
+		for (uint i = 0; i < GetNumOfPoints(); i++) { res += 4 * M_PI * getCoord(i) * getCoord(i) * m_data[i] * getStepBetweenPoints(); }
 		break;
 	default: throw new std::string("[RadialDistribution.cpp -- CountIntegral] неизвестная размерность"); break;
 	}
@@ -57,17 +57,22 @@ num count_one_dim_int(std::vector<num> &vec, num step)
 	return step * std::accumulate(vec.begin(), vec.end(), 0.0);
 }
 
-uint RadialDistribution::getNumOfPoints() { return m_data.size(); }
+uint RadialDistribution::GetNumOfPoints() { return m_data.size(); }
 
-num RadialDistribution::getStepBetweenPoints() { return (m_dist * 2) / getNumOfPoints(); }
+RadialDistribution RadialDistribution::GetRadiusDistribution()
+{
+	return RadialDistribution(m_dim, GetNumOfPoints(), m_dist, [](num r) -> num { return r; });
+}
+
+num RadialDistribution::getStepBetweenPoints() { return (m_dist * 2) / GetNumOfPoints(); }
 
 num RadialDistribution::getCoord(uint index) { return -m_dist + getStepBetweenPoints() * index; }
 
 RadialDistribution operationPerMember(RadialDistribution a, RadialDistribution b, int type)
 {
-	if (a.getNumOfPoints() != b.getNumOfPoints()) throw new std::string("[RadialDistribution.cpp -- operationPerMember] почленная операция над распределениями разного размера недопустима");
+	if (a.GetNumOfPoints() != b.GetNumOfPoints()) throw new std::string("[RadialDistribution.cpp -- operationPerMember] почленная операция над распределениями разного размера недопустима");
 	if (a.m_dim != b.m_dim) throw new std::string("[RadialDistribution.cpp -- operationPerMember] почленная операция над распределениями разных размерностей недопустима");
-	RadialDistribution result = RadialDistribution(a.m_dim, a.getNumOfPoints(), a.m_dist);
+	RadialDistribution result = RadialDistribution(a.m_dim, a.GetNumOfPoints(), a.m_dist);
 	for (uint i = 0; i < a.m_data.size(); i++)
 	{
 		switch (type)
@@ -84,7 +89,7 @@ RadialDistribution operationPerMember(RadialDistribution a, RadialDistribution b
 
 RadialDistribution RadialDistribution::operationWithNumber(num a, int type)
 {
-	RadialDistribution result = RadialDistribution(m_dim, getNumOfPoints(), m_dist);
+	RadialDistribution result = RadialDistribution(m_dim, GetNumOfPoints(), m_dist);
 	for (uint i = 0; i < m_data.size(); i++)
 	{
 		switch (type)
@@ -98,3 +103,13 @@ RadialDistribution RadialDistribution::operationWithNumber(num a, int type)
 }
 
 num RadialDistribution::Zero(num r) { return 0; }
+
+RadialDistribution::operator Json::Value() const
+{
+	Json::Value res = Json::arrayValue;
+	for (auto i = m_data.begin(); i != m_data.end(); i++)
+	{
+		res.append(*i);
+	}
+	return res;
+}
