@@ -107,6 +107,6 @@ inline void InputSet::insert(std::string field, T value)
 	case "d11": d11 = value; break;
 	case "d12": d12 = value; break;
 	case "d22": d22 = value; break;
-	default: /* TODO: Throw error*/ break;
+	default: throw std::exception("[IOSets -- InputSet::insert] ѕопытка вставки пол€ с неправильным названием"); break;
 	}
 }
