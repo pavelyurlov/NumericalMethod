@@ -67,7 +67,7 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 	num eps = static_cast<num>(1e-2);
 
 	// count
-	for (uint i = 0; i < max_iter; i++)
+	for (uint i = 0; i < preferences.max_iter; i++)
 	{
 		COLLECT_RESULTS_MAKROS;
 		//std::cout << result;
@@ -158,9 +158,9 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 OutputSet solve_iter_sym(InputSet s)
 {
 	if (preferences.one_kind)
-		return solve_iter_sym_one_kind(s.A, s.N, s.max_iter, s.a, s.sw11, s.sw12, s.sw21, s.sw22, s.sm1, s.sm2, s.b1, s.b2, s.d1, s.d2, s.d11, s.d12, s.d21, s.d22);
+		return solve_iter_sym_one_kind(s.A, s.N, preferences.max_iter, s.a, s.sw11, s.sw12, s.sw21, s.sw22, s.sm1, s.sm2, s.b1, s.b2, s.d1, s.d2, s.d11, s.d12, s.d21, s.d22);
 	else
-		return solve_iter_sym(s.A, s.N, s.max_iter, s.a, s.sw11, s.sw12, s.sw21, s.sw22, s.sm1, s.sm2, s.b1, s.b2, s.d1, s.d2, s.d11, s.d12, s.d21, s.d22);
+		return solve_iter_sym(s.A, s.N, preferences.max_iter, s.a, s.sw11, s.sw12, s.sw21, s.sw22, s.sm1, s.sm2, s.b1, s.b2, s.d1, s.d2, s.d11, s.d12, s.d21, s.d22);
 }
 
 template <typename T>

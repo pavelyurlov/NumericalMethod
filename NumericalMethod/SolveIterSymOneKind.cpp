@@ -49,7 +49,7 @@ OutputSet solve_iter_sym_one_kind(num A, uint N, uint max_iter, num a, num sw11,
 	num eps = static_cast<num>(1e-2);
 
 	// count
-	for (uint i = 0; i < max_iter; i++)
+	for (uint i = 0; i < preferences.max_iter; i++)
 	{
 		COLLECT_RESULTS_MAKROS;
 		//std::cout << result;

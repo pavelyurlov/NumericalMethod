@@ -10,7 +10,7 @@ struct field
 	string name_in_file;
 	string name_in_is;
 
-	field(string name_in_file, string name_in_is):
+	field(string name_in_file, string name_in_is) :
 		name_in_file(name_in_file),
 		name_in_is(name_in_is)
 	{}
@@ -23,7 +23,7 @@ struct field
 // 3. end - итератор на последний аргумент.
 // 4. result - результат. По ссылке, така как возвращается. Функция добавляет всё в конец, ничего не стирая и не создавая.
 // 5. current - внутреннее. Текущий инпутсет.
-void readVer1(Json::Value &root, std::vector<field>::iterator now, std::vector<field>::iterator end, std::vector<InputSet> &result, InputSet current = InputSet())  //  string fieldName, T &field)
+void readVer1(Json::Value &root, std::vector<field>::iterator now, std::vector<field>::iterator end, std::vector<InputSet> &result, InputSet current = InputSet())
 {
 	// если поле не найдётся - это очень плохо, это ошибка
 	if (root.isMember(now->name_in_file))
@@ -39,9 +39,9 @@ void readVer1(Json::Value &root, std::vector<field>::iterator now, std::vector<f
 				root[now->name_in_file].isMember("step")))
 				throw std::exception("[InputParser -- readVer1] В файле нет ожидаемого begin, end или step");
 
-			num begin	= root[now->name_in_file]["begin"].asFloat();
-			num end		= root[now->name_in_file]["end"].asFloat();
-			num step	= root[now->name_in_file]["step"].asFloat();
+			num begin = root[now->name_in_file]["begin"].asFloat();
+			num end = root[now->name_in_file]["end"].asFloat();
+			num step = root[now->name_in_file]["step"].asFloat();
 
 			for (num i = begin; i < end; i += step)
 			{
@@ -92,7 +92,6 @@ std::vector<InputSet> parseVersion1(Json::Value root)
 	std::vector<field> inputFields;
 	inputFields.push_back(field("SizeOfArea", "A"));
 	inputFields.push_back(field("NumberOfGridDots", "N"));
-	inputFields.push_back(field("ClosureConstantAlpha", "max_iter"));
 	inputFields.push_back(field("DeathRate1", "a"));
 	inputFields.push_back(field("DeathRate2", "sw11"));
 	inputFields.push_back(field("BirthRate1", "sw12"));
@@ -114,7 +113,20 @@ std::vector<InputSet> parseVersion1(Json::Value root)
 	readVer1(root, inputFields.begin(), inputFields.end(), result);
 	return result;
 
-	// TODO: Добавить чтение полей с настройками
+	if (!(root.isMember("Dimentions") &&
+		root.isMember("PrintD") &&
+		root.isMember("MaxIterations") &&
+		root.isMember("NumberOfKinds")))
+		throw std::exception("[InputParser -- parseVersion1] Нету полей настроек: Dimentions, PrintD, MaxIterations, или NumberOfKinds");
+	preferences.dimentions = root["Dimentions"].asInt();
+	preferences.print_D = root["PrintD"].asBool();
+	preferences.max_iter = root["MaxIterations"].asInt();
+	switch (root["NumberOfKinds"].asInt())
+	{
+	case 1: preferences.one_kind = true;	break;
+	case 2:	preferences.one_kind = false;	break;
+	default: throw std::exception("[InputParser -- parseVersion1] Количество видов должно быть 1 или 2");
+	}
 }
 
 std::vector<InputSet> InputParser::Parse(std::string filename)
@@ -139,8 +151,8 @@ std::vector<InputSet> InputParser::Parse(std::string filename)
 	case 1:
 		result = parseVersion1(root);
 		break;
-	//default:
-		// TODO: Бросить исключение о неизвестном формате
+		//default:
+			// TODO: Бросить исключение о неизвестном формате
 	}
 
 	return result;

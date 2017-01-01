@@ -2,11 +2,12 @@
 
 #include "minitypes.h"
 
-const struct
+struct
 {
-	bool print_D = true; // печатать ли длинные выходные данные?
-	bool one_kind = false;
-	uint dimentions = 2; // не работает в случае одного вида
+	bool print_D; // печатать ли длинные выходные данные?
+	bool one_kind;
+	uint dimentions; // не работает в случае одного вида
+	uint max_iter;
 } preferences;
 
 extern MatlabVector g_rh; // вектор координат точек
