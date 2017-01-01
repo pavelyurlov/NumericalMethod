@@ -48,6 +48,8 @@ struct InputSet
 		root["d22"] = this->d22;
 		return root;
 	}
+	template <typename T>
+	void insert(std::string field, T value);
 };
 
 struct OutputSet
@@ -82,3 +84,29 @@ struct OutputSet
 
 std::ostream& operator<<(std::ostream&, OutputSet&);
 std::ostream& operator<<(std::ostream&, InputSet&);
+
+template<typename T>
+inline void InputSet::insert(std::string field, T value)
+{
+	switch (field)
+	{
+	case "A": A = value; break;
+	case "N": N = value; break;
+	case "max_iter": max_iter = value; break;
+	case "a": a = value; break;
+	case "sw11": sw11 = value; break;
+	case "sw12": sw12 = value; break;
+	case "sw21": sw21 = value; break;
+	case "sw22": sw22 = value; break;
+	case "sm1": sm1 = value; break;
+	case "sm2": sm2 = value; break;
+	case "b1": b1 = value; break;
+	case "b2": b2 = value; break;
+	case "d1": d1 = value; break;
+	case "d2": d2 = value; break;
+	case "d11": d11 = value; break;
+	case "d12": d12 = value; break;
+	case "d22": d22 = value; break;
+	default: /* TODO: Throw error*/ break;
+	}
+}

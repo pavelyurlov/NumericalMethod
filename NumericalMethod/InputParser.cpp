@@ -2,30 +2,53 @@
 #include <fstream>
 #include "json\json.h"
 
-template <typename T>
-void readFieldVersion1(Json::Value root, std::string fieldName, T &field)
-{
-	// TODO: Добавить обработку пунктов 8 и 9.
+using std::string;
+using std::vector;
 
-	if (root.isMember(fieldName))
+struct field
+{
+	string name_in_file;
+	string name_in_is;
+
+	field(string name_in_file, string name_in_is):
+		name_in_file(name_in_file),
+		name_in_is(name_in_is)
+	{}
+};
+
+void readVer1(Json::Value &root, std::vector<field>::iterator now, std::vector<field>::iterator end, std::vector<InputSet> &result, InputSet current = InputSet())  //  string fieldName, T &field)
+{
+	if (root.isMember(now->name_in_file))
 	{
-		// А это вообще поддерживается языком?
-		switch (T)
+		vector<num> vals;
+		if (false) // TODO: если там перебор
+		{}
+		else
 		{
-		case int:
-			field = root[fieldName].asInt();
-			break;
-		case float:
-			field = root[fieldName].asFloat();
-			break;
-		default:
-			// TODO: Кинуть исключение
+			vals.push_back(root[now->name_in_file].asFloat());
+		}
+		std::vector<field>::iterator next = now;
+		next++;
+		for (num val : vals)
+		{
+			current.insert(now->name_in_is, val);
+			if (next == end)
+			{
+				result.push_back(current);
+			}
+			else
+			{
+				readVer1(root, next, end, result, current);
+			}
 		}
 	}
 	else
 	{
-		// TODO: Кинуть исключение
+		// TODO: throw Exception;
 	}
+
+	// TODO: Добавить обработку пунктов 8 и 9.
+
 }
 
 std::vector<InputSet> parseVersion1(Json::Value root)
@@ -41,25 +64,30 @@ std::vector<InputSet> parseVersion1(Json::Value root)
 		return InputParser::Parse(inputFileName);
 	}
 
+	std::vector<field> inputFields;
+	inputFields.push_back(field("SizeOfArea", "A"));
+	inputFields.push_back(field("NumberOfGridDots", "N"));
+	inputFields.push_back(field("ClosureConstantAlpha", "max_iter"));
+	inputFields.push_back(field("DeathRate1", "a"));
+	inputFields.push_back(field("DeathRate2", "sw11"));
+	inputFields.push_back(field("BirthRate1", "sw12"));
+	inputFields.push_back(field("BirthRate2", "sw21"));
+	inputFields.push_back(field("DeathRate1To1", "sw22"));
+	inputFields.push_back(field("DeathRate1To2", "sm1"));
+	inputFields.push_back(field("DeathRate2To1", "sm2"));
+	inputFields.push_back(field("DeathRate2To2", "b1"));
+	inputFields.push_back(field("SigmaBirth1", "b2"));
+	inputFields.push_back(field("SigmaBirth2", "d1"));
+	inputFields.push_back(field("SigmaDeath1To1", "d2"));
+	inputFields.push_back(field("SigmaDeath1To2", "d11"));
+	inputFields.push_back(field("SigmaDeath2To1", "d12"));
+	inputFields.push_back(field("SigmaDeath2To2", "d22"));
+
+
 	// Читаем поля
-	InputSet is;
-	readFieldVersion1(root, "SizeOfArea", is.A);
-	readFieldVersion1(root, "NumberOfGridDots", is.N);
-	readFieldVersion1(root, "ClosureConstantAlpha", is.a);
-	readFieldVersion1(root, "DeathRate1", is.d1);
-	readFieldVersion1(root, "DeathRate2", is.d2);
-	readFieldVersion1(root, "BirthRate1", is.b1);
-	readFieldVersion1(root, "BirthRate2", is.b2);
-	readFieldVersion1(root, "DeathRate1To1", is.d11);
-	readFieldVersion1(root, "DeathRate1To2", is.d12);
-	readFieldVersion1(root, "DeathRate2To1", is.d21);
-	readFieldVersion1(root, "DeathRate2To2", is.d22);
-	readFieldVersion1(root, "SigmaBirth1", is.sm1);
-	readFieldVersion1(root, "SigmaBirth2", is.sm2);
-	readFieldVersion1(root, "SigmaDeath1To1", is.sw11);
-	readFieldVersion1(root, "SigmaDeath1To2", is.sw12);
-	readFieldVersion1(root, "SigmaDeath2To1", is.sw21);
-	readFieldVersion1(root, "SigmaDeath2To2", is.sw22);
+	std::vector<InputSet> result;
+	readVer1(root, inputFields.begin(), inputFields.end(), result);
+	return result;
 
 	// TODO: Добавить чтение полей с настройками
 }
@@ -86,46 +114,9 @@ std::vector<InputSet> InputParser::Parse(std::string filename)
 	case 1:
 		result = parseVersion1(root);
 		break;
-	//sdefault:
+	//default:
 		// TODO: Бросить исключение о неизвестном формате
 	}
 
 	return result;
-
-
-
-	InputSet is;
-
-	//---------- - Model Constants--------
-	is.sm1 = 0.04, is.sm2 = 0.06;
-	is.b1 = 0.4; is.b2 = 0.4;
-	is.d11 = 0.001;  is.d22 = 0.001; is.d12 = 0.001; is.d21 = 0.001;
-	is.sw11 = 0.04, is.sw22 = 0.04, is.sw12 = 0.04, is.sw21 = 0.04;
-	is.d1 = 0.2; is.d2 = 0.2;
-
-
-	//----------Grid settings----------
-	is.N = 100;
-	is.A = 1;
-
-	//-------- - Numerical method Constants------ -
-	is.max_iter = 500;
-
-	//-------- - Closure Constants------ -
-	is.a = 0.4;
-
-
-
-	std::vector<InputSet> input;
-
-
-	for (num d12 = 0; d12 < 0.001; d12 += 0.001 * 0.05)
-	{
-		num sm2 = (d12 / 0.001) * 0.16;
-		is.d12 = d12;
-		is.sm2 = sm2;
-		input.push_back(is);
-	}
-
-	return std::vector<InputSet>();
 }
