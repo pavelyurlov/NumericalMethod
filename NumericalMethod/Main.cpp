@@ -15,12 +15,18 @@ int main(int cmdn, char* cmd[])
 	int rank, size;
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	MPI_Comm_size(MPI_COMM_WORLD, &size);
-
 	std::cout << "Process " << rank << ", total proc count: " << size << std::endl;
 
-	std::vector<InputSet> input = InputParser::Parse("input.json");
+	try
+	{
+		std::vector<InputSet> input = InputParser::Parse("input.json");
+		count_input(input);
+	}
+	catch (std::exception e)
+	{
+		std::cout << "Unhandled exception: " << e.what() << "\n";
+	}
 
-	count_input(input);
 
 	MPI_Finalize();
 	return 0;
