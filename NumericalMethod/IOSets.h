@@ -10,7 +10,7 @@ struct InputSet
 {
 	num A;
 	uint N;
-	uint max_iter;
+	//uint max_iter;
 	num a;
 	num sw11;
 	num sw12;
@@ -31,7 +31,7 @@ struct InputSet
 		Json::Value root;
 		root["A"] = this->A;
 		root["N"] = this->N;
-		root["max_iter"] = this->max_iter;
+		//root["max_iter"] = this->max_iter;
 		root["a"] = this->a;
 		root["sw11"] = this->sw11;
 		root["sw12"] = this->sw12;
@@ -92,7 +92,7 @@ inline void InputSet::insert(std::string field, T value)
 	{
 	case "A": A = value; break;
 	case "N": N = value; break;
-	case "max_iter": max_iter = value; break;
+	//case "max_iter": max_iter = value; break;
 	case "a": a = value; break;
 	case "sw11": sw11 = value; break;
 	case "sw12": sw12 = value; break;
