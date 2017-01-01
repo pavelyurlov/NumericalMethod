@@ -14,7 +14,7 @@
 MatlabVector linspace(num start, num end, uint n_points);
 MatlabVector precount_func(num param, num sigma, uint N, MatlabVector &rh);
 MatlabVector conv(MatlabVector a, MatlabVector b, int);
-extern OutputSet solve_iter_sym_one_kind(num A, uint N, uint max_iter, num a, num sw11, num sw12, num sw21, num sw22, num sm1, num sm2, num b1, num b2, num d1, num d2, num d11, num d12, num d21, num d22);
+extern OutputSet solve_iter_sym_one_kind(num A, uint N, num a, num sw11, num sw12, num sw21, num sw22, num sm1, num sm2, num b1, num b2, num d1, num d2, num d11, num d12, num d21, num d22);
 
 MatlabVector g_rh;
 num g_A;
@@ -32,7 +32,7 @@ num count_integral(MatlabVector a, MatlabVector b, num h)
 result.N1 = N1; result.N2 = N2; result.rh = rh; \
 result.y11 = y11; result.y12 = y12; result.y21 = y21; result.y22 = y22
 
-OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12, num sw21, num sw22, num sm1, num sm2, num b1, num b2, num d1, num d2, num d11, num d12, num d21, num d22)
+OutputSet solve_iter_sym(num A, uint N, num a, num sw11, num sw12, num sw21, num sw22, num sm1, num sm2, num b1, num b2, num d1, num d2, num d11, num d12, num d21, num d22)
 {
 	OutputSet result;
 
@@ -42,7 +42,7 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 	g_A = A;
 	g_N = N;
 	num h = 2 * A / N;
-	if (preferences.dimentions == 2) h *= 2 * A / N;
+	if (Preferences::dimentions == 2) h *= 2 * A / N;
 
 	MatlabVector m1 = precount_func(b1, sm1, N, rh);
 	MatlabVector m2 = precount_func(b2, sm2, N, rh);
@@ -67,7 +67,7 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 	num eps = static_cast<num>(1e-2);
 
 	// count
-	for (uint i = 0; i < preferences.max_iter; i++)
+	for (uint i = 0; i < Preferences::max_iter; i++)
 	{
 		COLLECT_RESULTS_MAKROS;
 		//std::cout << result;
@@ -157,10 +157,10 @@ OutputSet solve_iter_sym(num A, uint N, uint max_iter, num a, num sw11, num sw12
 
 OutputSet solve_iter_sym(InputSet s)
 {
-	if (preferences.one_kind)
-		return solve_iter_sym_one_kind(s.A, s.N, preferences.max_iter, s.a, s.sw11, s.sw12, s.sw21, s.sw22, s.sm1, s.sm2, s.b1, s.b2, s.d1, s.d2, s.d11, s.d12, s.d21, s.d22);
+	if (Preferences::one_kind)
+		return solve_iter_sym_one_kind(s.A, s.N, s.a, s.sw11, s.sw12, s.sw21, s.sw22, s.sm1, s.sm2, s.b1, s.b2, s.d1, s.d2, s.d11, s.d12, s.d21, s.d22);
 	else
-		return solve_iter_sym(s.A, s.N, preferences.max_iter, s.a, s.sw11, s.sw12, s.sw21, s.sw22, s.sm1, s.sm2, s.b1, s.b2, s.d1, s.d2, s.d11, s.d12, s.d21, s.d22);
+		return solve_iter_sym(s.A, s.N, s.a, s.sw11, s.sw12, s.sw21, s.sw22, s.sm1, s.sm2, s.b1, s.b2, s.d1, s.d2, s.d11, s.d12, s.d21, s.d22);
 }
 
 template <typename T>
@@ -189,7 +189,7 @@ MatlabVector linspace(num start, num end, uint n_points)
 	if (start > end) swap(start, end);
 	num step = (end - start) / n_points;
 	MatlabVector result = MatlabVector(n_points);
-	if (preferences.dimentions == 1)
+	if (Preferences::dimentions == 1)
 	{
 		result = MatlabVector(n_points);
 	}
@@ -199,7 +199,7 @@ MatlabVector linspace(num start, num end, uint n_points)
 	}
 	for (uint i = 0; i < n_points; i++)
 	{
-		if (preferences.dimentions == 1)
+		if (Preferences::dimentions == 1)
 		{
 			result[i] = start + step * i;
 		}

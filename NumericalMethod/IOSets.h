@@ -59,18 +59,18 @@ struct OutputSet
 	operator Json::Value() const
 	{
 		Json::Value root;
-		if (preferences.print_D)
+		if (Preferences::print_D)
 		{
 			root["rh"] = this->rh;
 			root["D11"] = this->D11;
-			if (!preferences.one_kind)
+			if (!Preferences::one_kind)
 			{
 				root["D12"] = this->D12;
 				root["D22"] = this->D22;
 			}
 		}
 		root["y11"] = this->y11;
-		if (!preferences.one_kind)
+		if (!Preferences::one_kind)
 		{
 			root["y12"] = this->y12;
 			root["y21"] = this->y21;
@@ -88,25 +88,21 @@ std::ostream& operator<<(std::ostream&, InputSet&);
 template<typename T>
 inline void InputSet::insert(std::string field, T value)
 {
-	switch (field)
-	{
-	case "A": A = value; break;
-	case "N": N = value; break;
-	//case "max_iter": max_iter = value; break;
-	case "a": a = value; break;
-	case "sw11": sw11 = value; break;
-	case "sw12": sw12 = value; break;
-	case "sw21": sw21 = value; break;
-	case "sw22": sw22 = value; break;
-	case "sm1": sm1 = value; break;
-	case "sm2": sm2 = value; break;
-	case "b1": b1 = value; break;
-	case "b2": b2 = value; break;
-	case "d1": d1 = value; break;
-	case "d2": d2 = value; break;
-	case "d11": d11 = value; break;
-	case "d12": d12 = value; break;
-	case "d22": d22 = value; break;
-	default: throw std::exception("[IOSets -- InputSet::insert] ѕопытка вставки пол€ с неправильным названием"); break;
-	}
+	if (field == "A") A = value; return;
+	if (field == "N") N = value; return;
+	if (field == "a") a = value; return;
+	if (field == "sw11") sw11 = value; return;
+	if (field == "sw12") sw12 = value; return;
+	if (field == "sw21") sw21 = value; return;
+	if (field == "sw22") sw22 = value; return;
+	if (field == "sm1") sm1 = value; return;
+	if (field == "sm2") sm2 = value; return;
+	if (field == "b1") b1 = value; return;
+	if (field == "b2") b2 = value; return;
+	if (field == "d1") d1 = value; return;
+	if (field == "d2") d2 = value; return;
+	if (field == "d11") d11 = value; return;
+	if (field == "d12") d12 = value; return;
+	if (field == "d22") d22 = value; return;
+	throw std::exception("[IOSets -- InputSet::insert] ѕопытка вставки пол€ с неправильным названием");
 }

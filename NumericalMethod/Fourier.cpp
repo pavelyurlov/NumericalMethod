@@ -175,7 +175,7 @@ MatlabVector conv_2d_mkl(MatlabVector a, MatlabVector b)
 // основная программа вызывает эту функцию
 MatlabVector conv(MatlabVector a, MatlabVector b, int) // int в конце несущественнен
 {
-	switch (preferences.dimentions)
+	switch (Preferences::dimentions)
 	{
 	case 1:
 		return conv_1d_mkl(a, b);

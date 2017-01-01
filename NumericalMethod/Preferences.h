@@ -1,14 +1,15 @@
 #pragma once
 
 #include "minitypes.h"
+#include "MatlabVector.h"
 
-struct
+struct Preferences
 {
-	bool print_D; // печатать ли длинные выходные данные?
-	bool one_kind;
-	uint dimentions; // не работает в случае одного вида
-	uint max_iter;
-} preferences;
+	static bool print_D; // печатать ли длинные выходные данные?
+	static bool one_kind;
+	static uint dimentions; // не работает в случае одного вида
+	static uint max_iter;
+};
 
 extern MatlabVector g_rh; // вектор координат точек
 extern uint g_iterations_count; // количество работы, лог

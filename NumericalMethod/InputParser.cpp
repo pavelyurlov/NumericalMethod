@@ -118,13 +118,13 @@ std::vector<InputSet> parseVersion1(Json::Value root)
 		root.isMember("MaxIterations") &&
 		root.isMember("NumberOfKinds")))
 		throw std::exception("[InputParser -- parseVersion1] Нету полей настроек: Dimentions, PrintD, MaxIterations, или NumberOfKinds");
-	preferences.dimentions = root["Dimentions"].asInt();
-	preferences.print_D = root["PrintD"].asBool();
-	preferences.max_iter = root["MaxIterations"].asInt();
+	Preferences::dimentions = root["Dimentions"].asInt();
+	Preferences::print_D = root["PrintD"].asBool();
+	Preferences::max_iter = root["MaxIterations"].asInt();
 	switch (root["NumberOfKinds"].asInt())
 	{
-	case 1: preferences.one_kind = true;	break;
-	case 2:	preferences.one_kind = false;	break;
+	case 1: Preferences::one_kind = true;	break;
+	case 2:	Preferences::one_kind = false;	break;
 	default: throw std::exception("[InputParser -- parseVersion1] Количество видов должно быть 1 или 2");
 	}
 }

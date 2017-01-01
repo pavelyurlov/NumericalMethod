@@ -1,5 +1,6 @@
 // "solve_nonlinear_correct.m"
 
+#include "Preferences.h"
 #include "IOSets.h"
 #include "InputParser.h"
 #include "Master.h"
@@ -7,6 +8,12 @@
 #include <mpi.h>
 
 extern OutputSet solve_iter_sym(InputSet);
+
+uint Preferences::dimentions;
+bool Preferences::print_D;
+bool Preferences::one_kind;
+uint Preferences::max_iter;
+
 
 int main(int cmdn, char* cmd[])
 {
