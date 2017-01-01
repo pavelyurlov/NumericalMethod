@@ -16,17 +16,44 @@ struct field
 	{}
 };
 
+// рекурсивно читаем файл, создаём все инпутсеты и кладём их в аргумент result
+// аргументы:
+// 1. root - исходный файл. По ссылке для оптимизации.
+// 2. now - итератор на текущий аргумент.
+// 3. end - итератор на последний аргумент.
+// 4. result - результат. По ссылке, така как возвращается. Функция добавляет всё в конец, ничего не стирая и не создавая.
+// 5. current - внутреннее. Текущий инпутсет.
 void readVer1(Json::Value &root, std::vector<field>::iterator now, std::vector<field>::iterator end, std::vector<InputSet> &result, InputSet current = InputSet())  //  string fieldName, T &field)
 {
+	// если поле не найдётся - это очень плохо, это ошибка
 	if (root.isMember(now->name_in_file))
 	{
 		vector<num> vals;
-		if (false) // TODO: если там перебор
-		{}
-		else
+		if (root[now->name_in_file].isMember("begin")) // если это перебор
+		{
+			// TODO: Добавить обработку пункта 9. Сложно, но возможно.
+
+			// если что-то забыто, это ошибка
+			if (!(root[now->name_in_file].isMember("begin") &&
+				root[now->name_in_file].isMember("end") &&
+				root[now->name_in_file].isMember("step")))
+				throw std::exception("[InputParser -- readVer1] В файле нет ожидаемого begin, end или step");
+
+			num begin	= root[now->name_in_file]["begin"].asFloat();
+			num end		= root[now->name_in_file]["end"].asFloat();
+			num step	= root[now->name_in_file]["step"].asFloat();
+
+			for (num i = begin; i < end; i += step)
+			{
+				vals.push_back(i);
+			}
+		}
+		else // если это тупо одно значение
 		{
 			vals.push_back(root[now->name_in_file].asFloat());
 		}
+
+		// берём следующий шаг по массиву аргументов, либо записываем результат, если это последний
 		std::vector<field>::iterator next = now;
 		next++;
 		for (num val : vals)
@@ -44,11 +71,8 @@ void readVer1(Json::Value &root, std::vector<field>::iterator now, std::vector<f
 	}
 	else
 	{
-		// TODO: throw Exception;
+		throw std::exception("[InputParser -- readVer1] В файле нет ожидаемого имени");
 	}
-
-	// TODO: Добавить обработку пунктов 8 и 9.
-
 }
 
 std::vector<InputSet> parseVersion1(Json::Value root)
@@ -64,6 +88,7 @@ std::vector<InputSet> parseVersion1(Json::Value root)
 		return InputParser::Parse(inputFileName);
 	}
 
+	// TODO: Всё, что относится к InputSet, надо вынести в константы
 	std::vector<field> inputFields;
 	inputFields.push_back(field("SizeOfArea", "A"));
 	inputFields.push_back(field("NumberOfGridDots", "N"));
