@@ -7,6 +7,6 @@
 class InputParser
 {
 public:
-	static std::vector<InputSet> Parse(std::string filename);
+	_declspec(dllimport) static std::vector<InputSet> Parse(std::string filename);
 };
 
