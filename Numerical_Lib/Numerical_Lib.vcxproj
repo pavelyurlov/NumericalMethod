@@ -150,6 +150,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Error.h" />
     <ClInclude Include="InputParser.h" />
     <ClInclude Include="IOSets.h" />
     <ClInclude Include="json\json-forwards.h" />
@@ -161,6 +162,7 @@
     <ClInclude Include="Preferences.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Error.cpp" />
     <ClCompile Include="Fourier.cpp" />
     <ClCompile Include="InputParser.cpp" />
     <ClCompile Include="IOSets.cpp" />

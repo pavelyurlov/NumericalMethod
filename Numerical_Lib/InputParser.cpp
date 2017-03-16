@@ -1,6 +1,7 @@
 #include "InputParser.h"
 #include <fstream>
 #include "json\json.h"
+#include "Error.h"
 
 using std::string;
 using std::vector;
@@ -82,7 +83,7 @@ std::vector<InputSet> parseVersion1(Json::Value root)
 	// Проверяем, является ли файл ссылкой
 	if (root.isMember("InputFileName"))
 	{
-		// TODO: Проверить наличие других полей, если есть, кинуть исключение
+		// TODO: Проверить наличие других полей, если есть, кинуть исключение, сделать по этому тест
 
 		std::string inputFileName = root["InputFileName"].asString();
 		return InputParser::Parse(inputFileName);
@@ -131,17 +132,24 @@ std::vector<InputSet> parseVersion1(Json::Value root)
 
 std::vector<InputSet> InputParser::Parse(std::string filename)
 {
-	// Для лучшего понимания смотри "Формат входного файла численного метода"
+	// Для лучшего понимания смотри "Формат входного файла численного метода. Любая версия."
 
 	// Открываем файл
-	// TODO: Что, если файл не найден?
 	std::ifstream file = std::ifstream(filename);
+	if (!file.good()) throw Error(ERROR_INPUT_PARSER_FILE_DOES_NOT_EXIST);
 
 	// Читаем версию файла
-	// TODO: Что, если версии нет?
 	Json::Value root;
-	file >> root;
-	int format = root["InputFileFormat"].asInt();
+	int format = 0;
+	try
+	{
+		file >> root;
+		format = root["InputFileFormat"].asInt();
+	}
+	catch (Json::Exception je)
+	{
+		throw Error(ERROR_INPUT_PARSER_JSON_CANT_READ_VERSION);
+	}
 
 	std::vector<InputSet> result;
 
@@ -151,8 +159,8 @@ std::vector<InputSet> InputParser::Parse(std::string filename)
 	case 1:
 		result = parseVersion1(root);
 		break;
-		//default:
-			// TODO: Бросить исключение о неизвестном формате
+	default:
+		throw Error(ERROR_INPUT_PARSER_UNKNOWN_VERSION);
 	}
 
 	return result;
