@@ -22,7 +22,7 @@ struct field
 // 1. root - исходный файл. По ссылке для оптимизации.
 // 2. now - итератор на текущий аргумент.
 // 3. end - итератор на последний аргумент.
-// 4. result - результат. По ссылке, така как возвращается. Функция добавляет всё в конец, ничего не стирая и не создавая.
+// 4. result - результат. По ссылке, так как возвращается. Функция добавляет всё в конец, ничего не стирая и не создавая.
 // 5. current - внутреннее. Текущий инпутсет.
 void readVer1(Json::Value &root, std::vector<field>::iterator now, std::vector<field>::iterator end, std::vector<InputSet> &result, InputSet current = InputSet())
 {
@@ -30,7 +30,7 @@ void readVer1(Json::Value &root, std::vector<field>::iterator now, std::vector<f
 	if (root.isMember(now->name_in_file))
 	{
 		vector<num> vals;
-		if (root[now->name_in_file].isMember("begin")) // если это перебор
+		if (root[now->name_in_file].isObject() && root[now->name_in_file].isMember("begin")) // если это перебор
 		{
 			// TODO: Добавить обработку пункта 9. Сложно, но возможно.
 
@@ -51,7 +51,8 @@ void readVer1(Json::Value &root, std::vector<field>::iterator now, std::vector<f
 		}
 		else // если это тупо одно значение
 		{
-			vals.push_back(root[now->name_in_file].asFloat());
+			if (!root[now->name_in_file].isDouble()) throw Error(std::wstring(L"dwad")); // TODO описание ошибки левых данных
+			vals.push_back(root[now->name_in_file].asDouble());
 		}
 
 		// берём следующий шаг по массиву аргументов, либо записываем результат, если это последний
@@ -91,22 +92,23 @@ std::vector<InputSet> parseVersion1(Json::Value root)
 
 	// TODO: Всё, что относится к InputSet, надо вынести в константы
 	std::vector<field> inputFields;
-	inputFields.push_back(field("SizeOfArea", "A"));
-	inputFields.push_back(field("NumberOfGridDots", "N"));
-	inputFields.push_back(field("DeathRate1", "a"));
-	inputFields.push_back(field("DeathRate2", "sw11"));
-	inputFields.push_back(field("BirthRate1", "sw12"));
-	inputFields.push_back(field("BirthRate2", "sw21"));
-	inputFields.push_back(field("DeathRate1To1", "sw22"));
-	inputFields.push_back(field("DeathRate1To2", "sm1"));
-	inputFields.push_back(field("DeathRate2To1", "sm2"));
-	inputFields.push_back(field("DeathRate2To2", "b1"));
-	inputFields.push_back(field("SigmaBirth1", "b2"));
-	inputFields.push_back(field("SigmaBirth2", "d1"));
-	inputFields.push_back(field("SigmaDeath1To1", "d2"));
-	inputFields.push_back(field("SigmaDeath1To2", "d11"));
-	inputFields.push_back(field("SigmaDeath2To1", "d12"));
-	inputFields.push_back(field("SigmaDeath2To2", "d22"));
+	inputFields.push_back(field("SizeOfArea",			"A"));
+	inputFields.push_back(field("NumberOfGridDots",		"N"));
+	inputFields.push_back(field("ClosureConstantAlpha",	"a"));
+	inputFields.push_back(field("DeathRate1",			"d1"));
+	inputFields.push_back(field("DeathRate2",			"d2"));
+	inputFields.push_back(field("BirthRate1",			"b1"));
+	inputFields.push_back(field("BirthRate2",			"b2"));
+	inputFields.push_back(field("DeathRate1To1",		"d11"));
+	inputFields.push_back(field("DeathRate1To2",		"d12"));
+	inputFields.push_back(field("DeathRate2To1",		"d21"));
+	inputFields.push_back(field("DeathRate2To2",		"d22"));
+	inputFields.push_back(field("SigmaBirth1",			"sm1"));
+	inputFields.push_back(field("SigmaBirth2",			"sm2"));
+	inputFields.push_back(field("SigmaDeath1To1",		"sw11"));
+	inputFields.push_back(field("SigmaDeath1To2",		"sw12"));
+	inputFields.push_back(field("SigmaDeath2To1",		"sw21"));
+	inputFields.push_back(field("SigmaDeath2To2",		"sw22"));
 
 
 	// Читаем поля

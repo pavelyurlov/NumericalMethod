@@ -5,7 +5,10 @@
 
 void main()
 {
-	std::ifstream file = std::ifstream("..\\Num_UnitTest\\TestFiles\\1.json");
-	std::cout << file.good();
-	std::vector<InputSet> res = InputParser::Parse(".\TestFiles\1.json");
+	//std::ifstream file = std::ifstream("..\\Num_UnitTest\\TestFiles\\test_normal_file.json");
+	//std::cout << file.good();
+	//std::vector<InputSet> res = InputParser::Parse("..\\Num_UnitTest\\TestFiles\\test_normal_file.json");
+
+	InputSet is;
+	is.insert("N", 5);
 }

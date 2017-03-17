@@ -74,6 +74,12 @@ namespace Num_UnitTest
 			std::ofstream o = std::ofstream("file_to_find_working_dir.txt");
 			o.close();
 		}
+
+		TEST_METHOD(StaticCast)
+		{
+			double value = 16.00000;
+			Assert::AreEqual(static_cast<uint>(16), static_cast<uint>(value), L"static_cast из double в uint");
+		}
 	};
 
 	TEST_CLASS(InputUnitTest)
@@ -100,17 +106,53 @@ namespace Num_UnitTest
 		TEST_METHOD(NormalFile)
 		{
 			std::vector<InputSet> res = InputParser::Parse("..\\Num_UnitTest\\TestFiles\\test_normal_file.json");
-			Assert::AreEqual((float)res[0].b1, (float)4, L"Обычное чтение из файла", LINE_INFO());
-			// TODO все поля
+			Assert::AreEqual((float)17, (float)res[0].A,    L"Обычное чтение из файла", LINE_INFO());
+			Assert::AreEqual((float)16, (float)res[0].N,    L"Обычное чтение из файла", LINE_INFO());
+			Assert::AreEqual((float)18, (float)res[0].a,    L"Обычное чтение из файла", LINE_INFO());
+			Assert::AreEqual((float)12, (float)res[0].sw11, L"Обычное чтение из файла", LINE_INFO());
+			Assert::AreEqual((float)13, (float)res[0].sw12, L"Обычное чтение из файла", LINE_INFO());
+			Assert::AreEqual((float)14, (float)res[0].sw21, L"Обычное чтение из файла", LINE_INFO());
+			Assert::AreEqual((float)15, (float)res[0].sw22, L"Обычное чтение из файла", LINE_INFO());
+			Assert::AreEqual((float)10, (float)res[0].sm1,  L"Обычное чтение из файла", LINE_INFO());
+			Assert::AreEqual((float)11, (float)res[0].sm2,  L"Обычное чтение из файла", LINE_INFO());
+			Assert::AreEqual((float)4,  (float)res[0].b1,   L"Обычное чтение из файла", LINE_INFO());
+			Assert::AreEqual((float)5,  (float)res[0].b2,   L"Обычное чтение из файла", LINE_INFO());
+			Assert::AreEqual((float)2,  (float)res[0].d1,   L"Обычное чтение из файла", LINE_INFO());
+			Assert::AreEqual((float)3,  (float)res[0].d2,   L"Обычное чтение из файла", LINE_INFO());
+			Assert::AreEqual((float)6,  (float)res[0].d11,  L"Обычное чтение из файла", LINE_INFO());
+			Assert::AreEqual((float)7,  (float)res[0].d12,  L"Обычное чтение из файла", LINE_INFO());
+			Assert::AreEqual((float)8,  (float)res[0].d21,  L"Обычное чтение из файла", LINE_INFO());
+			Assert::AreEqual((float)9,  (float)res[0].d22,  L"Обычное чтение из файла", LINE_INFO());
 		}
 
-		/*
-		Ссылка - не единственное поле
-		Нормальная ссылка
-		Ссылка в пустоту
-		Ссылка на плохой файл
-		Отсутствие поля
-		*/
+		TEST_METHOD(LinkFile)
+		{
+			//Нормальная ссылка
+			Assert::Fail(L"UNDONE");
+		}
 
+		TEST_METHOD(GarbageLinkFile)
+		{
+			//Ссылка - не единственное поле
+			Assert::Fail(L"UNDONE");
+		}
+
+		TEST_METHOD(VoidLinkFile)
+		{
+			//Ссылка в пустоту
+			Assert::Fail(L"UNDONE");
+		}
+
+		TEST_METHOD(BadLinkFile)
+		{
+			//Ссылка на плохой файл
+			Assert::Fail(L"UNDONE");
+		}
+
+		TEST_METHOD(MissingFieldFile)
+		{
+			//Отсутствие поля
+			Assert::Fail(L"UNDONE");
+		}
 	};
 }

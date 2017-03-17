@@ -86,23 +86,24 @@ std::ostream& operator<<(std::ostream&, OutputSet&);
 std::ostream& operator<<(std::ostream&, InputSet&);
 
 template<typename T>
-inline void InputSet::insert(std::string field, T value)
+inline void InputSet::insert(const std::string field, T value)
 {
-	if (field == "A") A = value; return;
-	if (field == "N") N = value; return;
-	if (field == "a") a = value; return;
-	if (field == "sw11") sw11 = value; return;
-	if (field == "sw12") sw12 = value; return;
-	if (field == "sw21") sw21 = value; return;
-	if (field == "sw22") sw22 = value; return;
-	if (field == "sm1") sm1 = value; return;
-	if (field == "sm2") sm2 = value; return;
-	if (field == "b1") b1 = value; return;
-	if (field == "b2") b2 = value; return;
-	if (field == "d1") d1 = value; return;
-	if (field == "d2") d2 = value; return;
-	if (field == "d11") d11 = value; return;
-	if (field == "d12") d12 = value; return;
-	if (field == "d22") d22 = value; return;
+	if (field == "A")		{ A = value; return;		}
+	if (field == "N")		{ N = value; return;		}
+	if (field == "a")		{ a = value; return;		}
+	if (field == "sw11")	{ sw11 = value; return;		}
+	if (field == "sw12")	{ sw12 = value; return;		}
+	if (field == "sw21")	{ sw21 = value; return;		}
+	if (field == "sw22")	{ sw22 = value; return;		}
+	if (field == "sm1")		{ sm1 = value; return;		}
+	if (field == "sm2")		{ sm2 = value; return;		}
+	if (field == "b1")		{ b1 = value; return;		}
+	if (field == "b2")		{ b2 = value; return;		}
+	if (field == "d1")		{ d1 = value; return;		}
+	if (field == "d2")		{ d2 = value; return;		}
+	if (field == "d11")		{ d11 = value; return;		}
+	if (field == "d12")		{ d12 = value; return;		}
+	if (field == "d21")		{ d21 = value; return;		}
+	if (field == "d22")		{ d22 = value; return;		}
 	throw std::exception("[IOSets -- InputSet::insert] ѕопытка вставки пол€ с неправильным названием");
 }
