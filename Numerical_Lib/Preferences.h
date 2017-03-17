@@ -5,14 +5,14 @@
 
 struct Preferences
 {
-	static bool print_D; // печатать ли длинные выходные данные?
+	static bool print_D; // РїРµС‡Р°С‚Р°С‚СЊ Р»Рё РґР»РёРЅРЅС‹Рµ РІС‹С…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ?
 	static bool one_kind;
-	static uint dimentions; // не работает в случае одного вида
+	static uint dimentions; // РЅРµ СЂР°Р±РѕС‚Р°РµС‚ РІ СЃР»СѓС‡Р°Рµ РѕРґРЅРѕРіРѕ РІРёРґР°
 	static uint max_iter;
 };
 
-extern MatlabVector g_rh; // вектор координат точек
-extern uint g_iterations_count; // количество работы, лог
-extern num g_A; // размеры области
-extern uint g_N; // количество точек на одной стороне
-// наверное, стоит сделать весь input глобальным
+extern MatlabVector g_rh; // РІРµРєС‚РѕСЂ РєРѕРѕСЂРґРёРЅР°С‚ С‚РѕС‡РµРє
+extern uint g_iterations_count; // РєРѕР»РёС‡РµСЃС‚РІРѕ СЂР°Р±РѕС‚С‹, Р»РѕРі
+extern num g_A; // СЂР°Р·РјРµСЂС‹ РѕР±Р»Р°СЃС‚Рё
+extern uint g_N; // РєРѕР»РёС‡РµСЃС‚РІРѕ С‚РѕС‡РµРє РЅР° РѕРґРЅРѕР№ СЃС‚РѕСЂРѕРЅРµ
+// РЅР°РІРµСЂРЅРѕРµ, СЃС‚РѕРёС‚ СЃРґРµР»Р°С‚СЊ РІРµСЃСЊ input РіР»РѕР±Р°Р»СЊРЅС‹Рј

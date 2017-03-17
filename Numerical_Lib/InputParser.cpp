@@ -17,28 +17,28 @@ struct field
 	{}
 };
 
-// рекурсивно читаем файл, создаём все инпутсеты и кладём их в аргумент result
-// аргументы:
-// 1. root - исходный файл. По ссылке для оптимизации.
-// 2. now - итератор на текущий аргумент.
-// 3. end - итератор на последний аргумент.
-// 4. result - результат. По ссылке, так как возвращается. Функция добавляет всё в конец, ничего не стирая и не создавая.
-// 5. current - внутреннее. Текущий инпутсет.
+// СЂРµРєСѓСЂСЃРёРІРЅРѕ С‡РёС‚Р°РµРј С„Р°Р№Р», СЃРѕР·РґР°С‘Рј РІСЃРµ РёРЅРїСѓС‚СЃРµС‚С‹ Рё РєР»Р°РґС‘Рј РёС… РІ Р°СЂРіСѓРјРµРЅС‚ result
+// Р°СЂРіСѓРјРµРЅС‚С‹:
+// 1. root - РёСЃС…РѕРґРЅС‹Р№ С„Р°Р№Р». РџРѕ СЃСЃС‹Р»РєРµ РґР»СЏ РѕРїС‚РёРјРёР·Р°С†РёРё.
+// 2. now - РёС‚РµСЂР°С‚РѕСЂ РЅР° С‚РµРєСѓС‰РёР№ Р°СЂРіСѓРјРµРЅС‚.
+// 3. end - РёС‚РµСЂР°С‚РѕСЂ РЅР° РїРѕСЃР»РµРґРЅРёР№ Р°СЂРіСѓРјРµРЅС‚.
+// 4. result - СЂРµР·СѓР»СЊС‚Р°С‚. РџРѕ СЃСЃС‹Р»РєРµ, С‚Р°Рє РєР°Рє РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ. Р¤СѓРЅРєС†РёСЏ РґРѕР±Р°РІР»СЏРµС‚ РІСЃС‘ РІ РєРѕРЅРµС†, РЅРёС‡РµРіРѕ РЅРµ СЃС‚РёСЂР°СЏ Рё РЅРµ СЃРѕР·РґР°РІР°СЏ.
+// 5. current - РІРЅСѓС‚СЂРµРЅРЅРµРµ. РўРµРєСѓС‰РёР№ РёРЅРїСѓС‚СЃРµС‚.
 void readVer1(Json::Value &root, std::vector<field>::iterator now, std::vector<field>::iterator end, std::vector<InputSet> &result, InputSet current = InputSet())
 {
-	// если поле не найдётся - это очень плохо, это ошибка
+	// РµСЃР»Рё РїРѕР»Рµ РЅРµ РЅР°Р№РґС‘С‚СЃСЏ - СЌС‚Рѕ РѕС‡РµРЅСЊ РїР»РѕС…Рѕ, СЌС‚Рѕ РѕС€РёР±РєР°
 	if (root.isMember(now->name_in_file))
 	{
 		vector<num> vals;
-		if (root[now->name_in_file].isObject() && root[now->name_in_file].isMember("begin")) // если это перебор
+		if (root[now->name_in_file].isObject() && root[now->name_in_file].isMember("begin")) // РµСЃР»Рё СЌС‚Рѕ РїРµСЂРµР±РѕСЂ
 		{
-			// TODO: Добавить обработку пункта 9. Сложно, но возможно.
+			// TODO: Р”РѕР±Р°РІРёС‚СЊ РѕР±СЂР°Р±РѕС‚РєСѓ РїСѓРЅРєС‚Р° 9. РЎР»РѕР¶РЅРѕ, РЅРѕ РІРѕР·РјРѕР¶РЅРѕ.
 
-			// если что-то забыто, это ошибка
+			// РµСЃР»Рё С‡С‚Рѕ-С‚Рѕ Р·Р°Р±С‹С‚Рѕ, СЌС‚Рѕ РѕС€РёР±РєР°
 			if (!(root[now->name_in_file].isMember("begin") &&
 				root[now->name_in_file].isMember("end") &&
 				root[now->name_in_file].isMember("step")))
-				throw std::exception("[InputParser -- readVer1] В файле нет ожидаемого begin, end или step");
+				throw std::exception("[InputParser -- readVer1] Р’ С„Р°Р№Р»Рµ РЅРµС‚ РѕР¶РёРґР°РµРјРѕРіРѕ begin, end РёР»Рё step");
 
 			num begin = root[now->name_in_file]["begin"].asFloat();
 			num end = root[now->name_in_file]["end"].asFloat();
@@ -49,13 +49,13 @@ void readVer1(Json::Value &root, std::vector<field>::iterator now, std::vector<f
 				vals.push_back(i);
 			}
 		}
-		else // если это тупо одно значение
+		else // РµСЃР»Рё СЌС‚Рѕ С‚СѓРїРѕ РѕРґРЅРѕ Р·РЅР°С‡РµРЅРёРµ
 		{
-			if (!root[now->name_in_file].isDouble()) throw Error(std::wstring(L"dwad")); // TODO описание ошибки левых данных
+			if (!root[now->name_in_file].isDouble()) throw Error(std::wstring(L"dwad")); // TODO РѕРїРёСЃР°РЅРёРµ РѕС€РёР±РєРё Р»РµРІС‹С… РґР°РЅРЅС‹С…
 			vals.push_back(root[now->name_in_file].asDouble());
 		}
 
-		// берём следующий шаг по массиву аргументов, либо записываем результат, если это последний
+		// Р±РµСЂС‘Рј СЃР»РµРґСѓСЋС‰РёР№ С€Р°Рі РїРѕ РјР°СЃСЃРёРІСѓ Р°СЂРіСѓРјРµРЅС‚РѕРІ, Р»РёР±Рѕ Р·Р°РїРёСЃС‹РІР°РµРј СЂРµР·СѓР»СЊС‚Р°С‚, РµСЃР»Рё СЌС‚Рѕ РїРѕСЃР»РµРґРЅРёР№
 		std::vector<field>::iterator next = now;
 		next++;
 		for (num val : vals)
@@ -73,24 +73,24 @@ void readVer1(Json::Value &root, std::vector<field>::iterator now, std::vector<f
 	}
 	else
 	{
-		throw std::exception("[InputParser -- readVer1] В файле нет ожидаемого имени");
+		throw std::exception("[InputParser -- readVer1] Р’ С„Р°Р№Р»Рµ РЅРµС‚ РѕР¶РёРґР°РµРјРѕРіРѕ РёРјРµРЅРё");
 	}
 }
 
 std::vector<InputSet> parseVersion1(Json::Value root)
 {
-	// Для лучшего понимания смотри "Формат входного файла численного метода, версия 1"
+	// Р”Р»СЏ Р»СѓС‡С€РµРіРѕ РїРѕРЅРёРјР°РЅРёСЏ СЃРјРѕС‚СЂРё "Р¤РѕСЂРјР°С‚ РІС…РѕРґРЅРѕРіРѕ С„Р°Р№Р»Р° С‡РёСЃР»РµРЅРЅРѕРіРѕ РјРµС‚РѕРґР°, РІРµСЂСЃРёСЏ 1"
 
-	// Проверяем, является ли файл ссылкой
+	// РџСЂРѕРІРµСЂСЏРµРј, СЏРІР»СЏРµС‚СЃСЏ Р»Рё С„Р°Р№Р» СЃСЃС‹Р»РєРѕР№
 	if (root.isMember("InputFileName"))
 	{
-		// TODO: Проверить наличие других полей, если есть, кинуть исключение, сделать по этому тест
+		// TODO: РџСЂРѕРІРµСЂРёС‚СЊ РЅР°Р»РёС‡РёРµ РґСЂСѓРіРёС… РїРѕР»РµР№, РµСЃР»Рё РµСЃС‚СЊ, РєРёРЅСѓС‚СЊ РёСЃРєР»СЋС‡РµРЅРёРµ, СЃРґРµР»Р°С‚СЊ РїРѕ СЌС‚РѕРјСѓ С‚РµСЃС‚
 
 		std::string inputFileName = root["InputFileName"].asString();
 		return InputParser::Parse(inputFileName);
 	}
 
-	// TODO: Всё, что относится к InputSet, надо вынести в константы
+	// TODO: Р’СЃС‘, С‡С‚Рѕ РѕС‚РЅРѕСЃРёС‚СЃСЏ Рє InputSet, РЅР°РґРѕ РІС‹РЅРµСЃС‚Рё РІ РєРѕРЅСЃС‚Р°РЅС‚С‹
 	std::vector<field> inputFields;
 	inputFields.push_back(field("SizeOfArea",			"A"));
 	inputFields.push_back(field("NumberOfGridDots",		"N"));
@@ -111,7 +111,7 @@ std::vector<InputSet> parseVersion1(Json::Value root)
 	inputFields.push_back(field("SigmaDeath2To2",		"sw22"));
 
 
-	// Читаем поля
+	// Р§РёС‚Р°РµРј РїРѕР»СЏ
 	std::vector<InputSet> result;
 	readVer1(root, inputFields.begin(), inputFields.end(), result);
 	return result;
@@ -120,7 +120,7 @@ std::vector<InputSet> parseVersion1(Json::Value root)
 		root.isMember("PrintD") &&
 		root.isMember("MaxIterations") &&
 		root.isMember("NumberOfKinds")))
-		throw std::exception("[InputParser -- parseVersion1] Нету полей настроек: Dimentions, PrintD, MaxIterations, или NumberOfKinds");
+		throw std::exception("[InputParser -- parseVersion1] РќРµС‚Сѓ РїРѕР»РµР№ РЅР°СЃС‚СЂРѕРµРє: Dimentions, PrintD, MaxIterations, РёР»Рё NumberOfKinds");
 	Preferences::dimentions = root["Dimentions"].asInt();
 	Preferences::print_D = root["PrintD"].asBool();
 	Preferences::max_iter = root["MaxIterations"].asInt();
@@ -128,19 +128,19 @@ std::vector<InputSet> parseVersion1(Json::Value root)
 	{
 	case 1: Preferences::one_kind = true;	break;
 	case 2:	Preferences::one_kind = false;	break;
-	default: throw std::exception("[InputParser -- parseVersion1] Количество видов должно быть 1 или 2");
+	default: throw std::exception("[InputParser -- parseVersion1] РљРѕР»РёС‡РµСЃС‚РІРѕ РІРёРґРѕРІ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ 1 РёР»Рё 2");
 	}
 }
 
 std::vector<InputSet> InputParser::Parse(std::string filename)
 {
-	// Для лучшего понимания смотри "Формат входного файла численного метода. Любая версия."
+	// Р”Р»СЏ Р»СѓС‡С€РµРіРѕ РїРѕРЅРёРјР°РЅРёСЏ СЃРјРѕС‚СЂРё "Р¤РѕСЂРјР°С‚ РІС…РѕРґРЅРѕРіРѕ С„Р°Р№Р»Р° С‡РёСЃР»РµРЅРЅРѕРіРѕ РјРµС‚РѕРґР°. Р›СЋР±Р°СЏ РІРµСЂСЃРёСЏ."
 
-	// Открываем файл
+	// РћС‚РєСЂС‹РІР°РµРј С„Р°Р№Р»
 	std::ifstream file = std::ifstream(filename);
 	if (!file.good()) throw Error(ERROR_INPUT_PARSER_FILE_DOES_NOT_EXIST);
 
-	// Читаем версию файла
+	// Р§РёС‚Р°РµРј РІРµСЂСЃРёСЋ С„Р°Р№Р»Р°
 	Json::Value root;
 	int format = 0;
 	try
@@ -155,7 +155,7 @@ std::vector<InputSet> InputParser::Parse(std::string filename)
 
 	std::vector<InputSet> result;
 
-	// Читаем файл
+	// Р§РёС‚Р°РµРј С„Р°Р№Р»
 	switch (format)
 	{
 	case 1:

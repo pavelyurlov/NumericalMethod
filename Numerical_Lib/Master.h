@@ -15,7 +15,7 @@ extern OutputSet solve_iter_sym(InputSet);
 
 uint g_iterations_count;
 
-// οεχΰςΰες β τΰιλ
+// ΠΏΠµΡ‡Π°Ρ‚Π°ΠµΡ‚ Π² Ρ„Π°ΠΉΠ»
 void count_input(std::vector<InputSet> input_array)
 {
 	int mpi_rank, mpi_size;

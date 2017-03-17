@@ -11,8 +11,8 @@
 #include <specialfunctions.h>
 #include <gsl\gsl_dht.h>
 
-// быстрое одномерное преобразование Фурье векторов a и b ака численно заданных функций
-// вектор a и вектор b должны быть одинакового размера
+// Р±С‹СЃС‚СЂРѕРµ РѕРґРЅРѕРјРµСЂРЅРѕРµ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ Р¤СѓСЂСЊРµ РІРµРєС‚РѕСЂРѕРІ a Рё b Р°РєР° С‡РёСЃР»РµРЅРЅРѕ Р·Р°РґР°РЅРЅС‹С… С„СѓРЅРєС†РёР№
+// РІРµРєС‚РѕСЂ a Рё РІРµРєС‚РѕСЂ b РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РѕРґРёРЅР°РєРѕРІРѕРіРѕ СЂР°Р·РјРµСЂР°
 MatlabVector conv_fourier_lib(MatlabVector a, MatlabVector b)
 {
 	static uint size_a = 0, size_b = 0;
@@ -56,7 +56,7 @@ MatlabVector conv_fourier_lib(MatlabVector a, MatlabVector b)
 	DftiComputeForward(fpb, nB, fB);
 
 	if (a.size() != b.size()) throw new char*("a.size != b.size");
-	for (uint i = 0; i < a.size(); i++) // выход за пределы, если массивы разного размера. Но этого не должно случиться.
+	for (uint i = 0; i < a.size(); i++) // РІС‹С…РѕРґ Р·Р° РїСЂРµРґРµР»С‹, РµСЃР»Рё РјР°СЃСЃРёРІС‹ СЂР°Р·РЅРѕРіРѕ СЂР°Р·РјРµСЂР°. РќРѕ СЌС‚РѕРіРѕ РЅРµ РґРѕР»Р¶РЅРѕ СЃР»СѓС‡РёС‚СЊСЃСЏ.
 	{
 		auto tmp_compl = std::complex<num>(fA[i].real, fA[i].imag) * std::complex<num>(fB[i].real, fB[i].imag);
 		fA[i].real = tmp_compl.real();
@@ -74,7 +74,7 @@ MatlabVector conv_fourier_lib(MatlabVector a, MatlabVector b)
 	return res;
 }
 
-// прямое преобразование Ханкеля
+// РїСЂСЏРјРѕРµ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РҐР°РЅРєРµР»СЏ
 MatlabVector hankel_2D_direct(MatlabVector f)
 {
 	MatlabVector res(f.size());
@@ -129,8 +129,8 @@ MatlabVector hankel_2D_gsl(MatlabVector f)
 	return res;
 }
 
-// двумерное преобразование Фурье радиально-симметричных функций
-// середина входного вектора считается точкой ноль
+// РґРІСѓРјРµСЂРЅРѕРµ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ Р¤СѓСЂСЊРµ СЂР°РґРёР°Р»СЊРЅРѕ-СЃРёРјРјРµС‚СЂРёС‡РЅС‹С… С„СѓРЅРєС†РёР№
+// СЃРµСЂРµРґРёРЅР° РІС…РѕРґРЅРѕРіРѕ РІРµРєС‚РѕСЂР° СЃС‡РёС‚Р°РµС‚СЃСЏ С‚РѕС‡РєРѕР№ РЅРѕР»СЊ
 MatlabVector conv_radial_2D(MatlabVector a, MatlabVector b)
 {
 	MatlabVector res;
@@ -147,7 +147,7 @@ MatlabVector conv_1d_mkl(MatlabVector a, MatlabVector b)
 	if (size_a != a.size() || size_b != b.size())
 	{
 		size_a = a.size(); size_b = b.size();
-		vslConvDeleteTask(&convolution_ptr); // утечки?
+		vslConvDeleteTask(&convolution_ptr); // СѓС‚РµС‡РєРё?
 		vsldConvNewTask1D(&convolution_ptr, VSL_CONV_MODE_AUTO, size_a, size_b, size_a);
 	}
 	MatlabVector res = a;
@@ -163,7 +163,7 @@ MatlabVector conv_2d_mkl(MatlabVector a, MatlabVector b)
 	if (size_a != a.size() || size_b != b.size())
 	{
 		size_a = a.size(); size_b = b.size();
-		vslConvDeleteTask(&convolution_ptr); // утечки?
+		vslConvDeleteTask(&convolution_ptr); // СѓС‚РµС‡РєРё?
 		vsldConvNewTask(&convolution_ptr, VSL_CONV_MODE_AUTO, 2, shape, shape, shape);
 	}
 	MatlabVector res = a;
@@ -171,9 +171,9 @@ MatlabVector conv_2d_mkl(MatlabVector a, MatlabVector b)
 	return res;
 }
 
-// внешний "интерфейс"
-// основная программа вызывает эту функцию
-MatlabVector conv(MatlabVector a, MatlabVector b, int) // int в конце несущественнен
+// РІРЅРµС€РЅРёР№ "РёРЅС‚РµСЂС„РµР№СЃ"
+// РѕСЃРЅРѕРІРЅР°СЏ РїСЂРѕРіСЂР°РјРјР° РІС‹Р·С‹РІР°РµС‚ СЌС‚Сѓ С„СѓРЅРєС†РёСЋ
+MatlabVector conv(MatlabVector a, MatlabVector b, int) // int РІ РєРѕРЅС†Рµ РЅРµСЃСѓС‰РµСЃС‚РІРµРЅРЅРµРЅ
 {
 	switch (Preferences::dimentions)
 	{

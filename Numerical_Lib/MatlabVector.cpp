@@ -4,7 +4,7 @@
 
 MatlabVector MatlabVector::per_member_op(MatlabVector &other, num(*op)(num, num))
 {
-	if (this->size() != other.size()) throw new std::string("почленная операция над векторами разного размера недопустима");
+	if (this->size() != other.size()) throw new std::string("РїРѕС‡Р»РµРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ РЅР°Рґ РІРµРєС‚РѕСЂР°РјРё СЂР°Р·РЅРѕРіРѕ СЂР°Р·РјРµСЂР° РЅРµРґРѕРїСѓСЃС‚РёРјР°");
 	MatlabVector result = MatlabVector(this->size());
 	for (uint i = 0; i < this->size(); i++) result[i] = op((*this)[i], other[i]);
 	return result;
@@ -17,12 +17,12 @@ MatlabVector MatlabVector::per_member_op(num a, num(*op)(num, num))
 	return result;
 }
 
-//Ок, почему эти операторы летают в воздухе? Разве не должно быть MatlabVector::operator?
+//РћРє, РїРѕС‡РµРјСѓ СЌС‚Рё РѕРїРµСЂР°С‚РѕСЂС‹ Р»РµС‚Р°СЋС‚ РІ РІРѕР·РґСѓС…Рµ? Р Р°Р·РІРµ РЅРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ MatlabVector::operator?
 MatlabVector operator*(num n, MatlabVector mv) { return mv*n; }
 
 MatlabVector operator+(MatlabVector a, MatlabVector b)
 {
-	if (a.size() != b.size()) throw new std::string("почленная операция над векторами разного размера недопустима");
+	if (a.size() != b.size()) throw new std::string("РїРѕС‡Р»РµРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ РЅР°Рґ РІРµРєС‚РѕСЂР°РјРё СЂР°Р·РЅРѕРіРѕ СЂР°Р·РјРµСЂР° РЅРµРґРѕРїСѓСЃС‚РёРјР°");
 	MatlabVector result = MatlabVector(a.size());
 	for (uint i = 0; i < a.size(); i++) result[i] = a[i] + b[i];
 	return result;
@@ -30,7 +30,7 @@ MatlabVector operator+(MatlabVector a, MatlabVector b)
 
 MatlabVector operator-(MatlabVector a, MatlabVector b)
 {
-	if (a.size() != b.size()) throw new std::string("почленная операция над векторами разного размера недопустима");
+	if (a.size() != b.size()) throw new std::string("РїРѕС‡Р»РµРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ РЅР°Рґ РІРµРєС‚РѕСЂР°РјРё СЂР°Р·РЅРѕРіРѕ СЂР°Р·РјРµСЂР° РЅРµРґРѕРїСѓСЃС‚РёРјР°");
 	MatlabVector result = MatlabVector(a.size());
 	for (uint i = 0; i < a.size(); i++) result[i] = a[i] - b[i];
 	return result;
@@ -38,7 +38,7 @@ MatlabVector operator-(MatlabVector a, MatlabVector b)
 
 MatlabVector operator*(MatlabVector a, MatlabVector b)
 {
-	if (a.size() != b.size()) throw new std::string("почленная операция над векторами разного размера недопустима");
+	if (a.size() != b.size()) throw new std::string("РїРѕС‡Р»РµРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ РЅР°Рґ РІРµРєС‚РѕСЂР°РјРё СЂР°Р·РЅРѕРіРѕ СЂР°Р·РјРµСЂР° РЅРµРґРѕРїСѓСЃС‚РёРјР°");
 	MatlabVector result = MatlabVector(a.size());
 	for (uint i = 0; i < a.size(); i++) result[i] = a[i] * b[i];
 	return result;
@@ -46,7 +46,7 @@ MatlabVector operator*(MatlabVector a, MatlabVector b)
 
 MatlabVector operator/(MatlabVector a, MatlabVector b)
 {
-	if (a.size() != b.size()) throw new std::string("почленная операция над векторами разного размера недопустима");
+	if (a.size() != b.size()) throw new std::string("РїРѕС‡Р»РµРЅРЅР°СЏ РѕРїРµСЂР°С†РёСЏ РЅР°Рґ РІРµРєС‚РѕСЂР°РјРё СЂР°Р·РЅРѕРіРѕ СЂР°Р·РјРµСЂР° РЅРµРґРѕРїСѓСЃС‚РёРјР°");
 	MatlabVector result = MatlabVector(a.size());
 	for (uint i = 0; i < a.size(); i++) result[i] = a[i] / b[i];
 	return result;

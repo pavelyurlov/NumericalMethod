@@ -3,9 +3,9 @@
 #include "IOSets.h"
 
 
-const std::wstring ERROR_INPUT_PARSER_FILE_DOES_NOT_EXIST		= L"[InputParser] Файл не существует.";
-const std::wstring ERROR_INPUT_PARSER_JSON_CANT_READ_VERSION	= L"[InputParser] Невозможно прочитать версию файла.";
-const std::wstring ERROR_INPUT_PARSER_UNKNOWN_VERSION			= L"[InputParser] Неизвестная версия файла.";
+const std::wstring ERROR_INPUT_PARSER_FILE_DOES_NOT_EXIST		= L"[InputParser] Р¤Р°Р№Р» РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚.";
+const std::wstring ERROR_INPUT_PARSER_JSON_CANT_READ_VERSION	= L"[InputParser] РќРµРІРѕР·РјРѕР¶РЅРѕ РїСЂРѕС‡РёС‚Р°С‚СЊ РІРµСЂСЃРёСЋ С„Р°Р№Р»Р°.";
+const std::wstring ERROR_INPUT_PARSER_UNKNOWN_VERSION			= L"[InputParser] РќРµРёР·РІРµСЃС‚РЅР°СЏ РІРµСЂСЃРёСЏ С„Р°Р№Р»Р°.";
 
 class InputParser
 {

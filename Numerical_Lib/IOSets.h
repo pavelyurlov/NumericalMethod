@@ -105,5 +105,5 @@ inline void InputSet::insert(const std::string field, T value)
 	if (field == "d12")		{ d12 = value; return;		}
 	if (field == "d21")		{ d21 = value; return;		}
 	if (field == "d22")		{ d22 = value; return;		}
-	throw std::exception("[IOSets -- InputSet::insert] Попытка вставки поля с неправильным названием");
+	throw std::exception("[IOSets -- InputSet::insert] С•РѕРїС‹С‚РєР° РІСЃС‚Р°РІРєРё РїРѕР»В¤ СЃ РЅРµРїСЂР°РІРёР»СЊРЅС‹Рј РЅР°Р·РІР°РЅРёРµРј");
 }

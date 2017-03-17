@@ -15,7 +15,7 @@ namespace Num_UnitTest
 			uint correct = 5;
 			InputSet is;
 			is.insert("N", 5);
-			Assert::AreEqual(correct, is.N, L"Вставка в поле N");
+			Assert::AreEqual(correct, is.N, L"Р’СЃС‚Р°РІРєР° РІ РїРѕР»Рµ N");
 		}
 	};
 }
