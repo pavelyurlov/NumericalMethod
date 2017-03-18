@@ -1,4 +1,4 @@
-// "solve_nonlinear_correct.m"
+#include "Main.h"
 
 #include "Preferences.h"
 #include "IOSets.h"
@@ -37,4 +37,10 @@ int main(int cmdn, char* cmd[])
 
 	MPI_Finalize();
 	return 0;
+}
+
+
+void Main::Count()
+{
+	// TODO
 }
