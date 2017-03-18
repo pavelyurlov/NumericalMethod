@@ -11,6 +11,9 @@ public:
 	Distribution1D(Partition&, num n = 0);
 	Distribution1D(Partition&, Function&);
 
+	uint GetSize() { return m_data.size(); }
+	num* GetData() { return m_data.data(); }
+
 	num CountIntegral();
 
 	Distribution1D operator+ (Distribution1D&);

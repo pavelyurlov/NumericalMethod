@@ -71,7 +71,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\Program Files %28x86%29\GnuWin32\include;E:\Code\Либы\ALGLIB_cpp\src;D:\OLD\Program Files\Intel\MKL\10.2.6.037\include;C:\Program Files (x86)\Microsoft SDKs\MPI\Include;C:\Program Files (x86)\Microsoft SDKs\MPI\Include\x86;$(IncludePath)</IncludePath>
+    <IncludePath>D:\Program Files %28x86%29\GnuWin32\include;E:\Code\Либы\ALGLIB_cpp\src;D:\OLD\Program Files\Intel\MKL\10.2.6.037\include;C:\Program Files (x86)\Microsoft SDKs\MPI\Include;C:\Program Files (x86)\Microsoft SDKs\MPI\Include\x86;E:\Code\Либы\fftw-3.3.4-dll32;$(IncludePath)</IncludePath>
     <LibraryPath>D:\Program Files %28x86%29\GnuWin32\lib\Win32\Debug;E:\Code\Либы\ALGLIB_cpp\src\ALGLIB\Debug;C:\Program Files (x86)\Microsoft SDKs\MPI\Lib\x86;D:\OLD\Program Files\Intel\MKL\10.2.6.037\ia32\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
