@@ -22,3 +22,7 @@ bool Partition::IsAlike(num area_size, uint num_of_points)
 	return c_a == area_size && c_n == num_of_points; // TODO: Test different and same, especially same
 }
 
+num Partition::GetStep()
+{
+	return c_a / (c_n - 1);
+}

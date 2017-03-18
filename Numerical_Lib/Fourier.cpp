@@ -11,6 +11,8 @@
 #include <specialfunctions.h>
 #include <gsl\gsl_dht.h>
 
+#include "Fourier.h"
+
 // быстрое одномерное преобразование Фурье векторов a и b ака численно заданных функций
 // вектор a и вектор b должны быть одинакового размера
 MatlabVector conv_fourier_lib(MatlabVector a, MatlabVector b)

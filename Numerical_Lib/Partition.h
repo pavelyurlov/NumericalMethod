@@ -8,6 +8,7 @@ class Partition
 {
 public:
 	Partition& GetPartition(num area_size, uint num_of_points);	// середина отрезка - в нуле
+	num GetStep();
 private: // funcs
 	Partition(uint id, num area_size, uint num_of_points);
 	Partition(Partition&); // no copy constructor
