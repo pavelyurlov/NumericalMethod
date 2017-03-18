@@ -2,6 +2,7 @@
 #include "Distribution1D.h"
 #include "Partition.h"
 #include "Fourier.h"
+#include "FourierMKL.h"
 
 NumericalMethod::NumericalMethod(InputSet input):
 	c_input(input), m_part(Partition::GetPartition(input.A, input.N)), m_result(Partition::GetPartition(input.A, input.N)) {}
@@ -18,7 +19,7 @@ void NumericalMethod::Count()
 	OutputSet &o = m_result;		
 	Partition &p = m_part;
 	const num h = m_part.GetStep();
-	Distribution1D(&conv)(Distribution1D, Distribution1D) = Fourier::Convolution;
+	Distribution1D(&conv)(Distribution1D, Distribution1D) = FourierMKL::Convolution; // TODO: макросы на компиляцию
 
 	// init
 	Distribution1D m1(p,  NormalFunction1D(s.b1,  s.sm1));

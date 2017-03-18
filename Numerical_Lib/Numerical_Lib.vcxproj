@@ -153,6 +153,8 @@
     <ClInclude Include="Distribution1D.h" />
     <ClInclude Include="Error.h" />
     <ClInclude Include="Fourier.h" />
+    <ClInclude Include="FourierFFTW.h" />
+    <ClInclude Include="FourierMKL.h" />
     <ClInclude Include="Function.h" />
     <ClInclude Include="InputParser.h" />
     <ClInclude Include="IOSets.h" />
@@ -171,6 +173,8 @@
     <ClCompile Include="Distribution1D.cpp" />
     <ClCompile Include="Error.cpp" />
     <ClCompile Include="Fourier.cpp" />
+    <ClCompile Include="FourierFFTW.cpp" />
+    <ClCompile Include="FourierMKL.cpp" />
     <ClCompile Include="Function.cpp" />
     <ClCompile Include="InputParser.cpp" />
     <ClCompile Include="IOSets.cpp" />

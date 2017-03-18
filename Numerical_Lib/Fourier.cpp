@@ -191,28 +191,13 @@ MatlabVector conv(MatlabVector a, MatlabVector b, int) // int в конце не
 }
 
 // TODO: макросы на компиляцию
-// TODO: несколько файлов
-// TODO: объекты, а не static
-Distribution1D Fourier::Convolution(Distribution1D a, Distribution1D b)
+/*Distribution1D Fourier::Convolution(Distribution1D a, Distribution1D b)
 {
 	return Convolution1D_MKL(a, b);
-}
+}*/
 
-Distribution1D Fourier::Convolution1D_MKL(Distribution1D a, Distribution1D b)
-{
-	static uint size_a = 0, size_b = 0;
-	static VSLConvTaskPtr convolution_ptr = NULL;
-	if (size_a != a.GetSize() || size_b != b.GetSize())
-	{
-		size_a = a.GetSize(); size_b = b.GetSize();
-		vslConvDeleteTask(&convolution_ptr); // утечки?
-		vsldConvNewTask1D(&convolution_ptr, VSL_CONV_MODE_AUTO, size_a, size_b, size_a);
-	}
-	Distribution1D res = a; // TODO: проверить копирование. Лучше сделать через прямое создание
-	vsldConvExec1D(convolution_ptr, a.GetData(), 1, b.GetData(), 1, res.GetData(), 1);
-	return res;
-}
 
+/*
 Distribution1D Fourier::Convolution1D_FFTW(Distribution1D a, Distribution1D b)
 {
 	static uint size_a = 0, size_b = 0;
@@ -270,6 +255,7 @@ Distribution1D Fourier::Convolution1D_FFTW(Distribution1D a, Distribution1D b)
 
 	return res;
 }
+*/
 /*
 MatlabVector& conv_fourier_lib(MatlabVector a, MatlabVector b)
 {
