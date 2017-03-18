@@ -2,9 +2,11 @@
 
 #include "minitypes.h"
 #include "MatlabVector.h"
+#include "Distribution1D.h"
+#include "Preferences.h"
+
 #include "./json/json.h"
 #include <iostream>
-#include "Preferences.h"
 
 struct InputSet
 {
@@ -54,7 +56,8 @@ struct InputSet
 
 struct OutputSet
 {
-	MatlabVector rh, D11, D12, D22;
+	MatlabVector rh;
+	Distribution1D D11, D12, D22;
 	num y11, y12, y21, y22, N1, N2;
 	operator Json::Value() const
 	{

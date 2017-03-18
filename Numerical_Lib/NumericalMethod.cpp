@@ -13,23 +13,23 @@ void NumericalMethod::Count()
 	Partition &p = m_part;
 
 	// init
-	Distribution1D m1(p, /*func*/);// = precount_func(b1, sm1, N, rh); // TODO: func class
-	MatlabVector m2 = precount_func(b2, sm2, N, rh);
-	MatlabVector w11 = precount_func(d11, sw11, N, rh);
-	MatlabVector w21 = precount_func(d21, sw21, N, rh);
-	MatlabVector w12 = precount_func(d12, sw12, N, rh);
-	MatlabVector w22 = precount_func(d22, sw22, N, rh);
+	Distribution1D m1(p, Function(b1, sm1));
+	Distribution1D m2(p, Function(b2, sm2));
+	Distribution1D w11(p, Function(d11, sw11));
+	Distribution1D w21(p, Function(d21, sw21));
+	Distribution1D w12(p, Function(d12, sw12));
+	Distribution1D w22(p, Function(d22, sw22));
 
-	MatlabVector D11 = MatlabVector(rh.size()); std::fill(D11.begin(), D11.end(), 0);
-	MatlabVector D12 = MatlabVector(rh.size()); std::fill(D12.begin(), D12.end(), 0);
-	MatlabVector D22 = MatlabVector(rh.size()); std::fill(D22.begin(), D22.end(), 0);
+	o.D11 = Distribution1D(p, 0);
+	o.D12 = Distribution1D(p, 0);
+	o.D22 = Distribution1D(p, 0);
 
-	num y11 = d11;
-	num y12 = d12;
-	num y21 = d21;
-	num y22 = d22;
-	num N1 = 0;
-	num N2 = 0;
+	o.y11 = d11;
+	o.y12 = d12;
+	o.y21 = d21;
+	o.y22 = d22;
+	o.N1 = 0;
+	o.N2 = 0;
 
 	num prev_err = std::numeric_limits<num>::max();
 	num eps = static_cast<num>(1e-2);
