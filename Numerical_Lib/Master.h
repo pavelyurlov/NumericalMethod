@@ -10,7 +10,7 @@
 #include "IOSets.h"
 #include "minitypes.h"
 
-
+/*
 extern OutputSet solve_iter_sym(InputSet);
 
 uint g_iterations_count;
@@ -57,3 +57,5 @@ void count_input(std::vector<InputSet> input_array)
 
 	std::cout << "proc#" << mpi_rank << "; iterations:" << g_iterations_count << "; time:" << time_span.count() << " sec; timePerIteration:" << time_span.count() / g_iterations_count << " sec";
 }
+
+*/

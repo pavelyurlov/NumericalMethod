@@ -7,7 +7,7 @@
 #include <iostream>
 #include <mpi.h>
 
-extern OutputSet solve_iter_sym(InputSet);
+//extern OutputSet solve_iter_sym(InputSet);
 
 uint Preferences::dimentions;
 bool Preferences::print_D;
@@ -17,7 +17,7 @@ uint Preferences::max_iter;
 
 int main(int cmdn, char* cmd[])
 {
-	MPI_Init(&cmdn, &cmd);
+	/*MPI_Init(&cmdn, &cmd);
 
 	int rank, size;
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -36,7 +36,7 @@ int main(int cmdn, char* cmd[])
 
 
 	MPI_Finalize();
-	return 0;
+	return 0;*/
 }
 
 
