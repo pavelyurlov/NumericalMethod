@@ -4,7 +4,7 @@
 #include "Fourier.h"
 
 NumericalMethod::NumericalMethod(InputSet input):
-	c_input(input), m_part(Partition::GetPartition(input.A, input.N)) {} // TODO : Что это за ошибка?
+	c_input(input), m_part(Partition::GetPartition(input.A, input.N)), m_result(Partition::GetPartition(input.A, input.N)) {}
 
 OutputSet NumericalMethod::GetResult()
 {

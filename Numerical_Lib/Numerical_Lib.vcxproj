@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClInclude Include="Distribution1D.h" />
     <ClInclude Include="Error.h" />
+    <ClInclude Include="Fourier.h" />
     <ClInclude Include="Function.h" />
     <ClInclude Include="InputParser.h" />
     <ClInclude Include="IOSets.h" />

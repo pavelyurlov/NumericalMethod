@@ -32,9 +32,9 @@ num count_integral(MatlabVector a, MatlabVector b, num h)
 result.N1 = N1; result.N2 = N2; result.rh = rh; \
 result.y11 = y11; result.y12 = y12; result.y21 = y21; result.y22 = y22
 
-OutputSet solve_iter_sym(num A, uint N, num a, num sw11, num sw12, num sw21, num sw22, num sm1, num sm2, num b1, num b2, num d1, num d2, num d11, num d12, num d21, num d22)
+/*OutputSet*/ void solve_iter_sym(num A, uint N, num a, num sw11, num sw12, num sw21, num sw22, num sm1, num sm2, num b1, num b2, num d1, num d2, num d11, num d12, num d21, num d22)
 {
-	OutputSet result;
+	/*OutputSet result;
 
 	// precount functions
 	MatlabVector rh = linspace(-A, A, N);
@@ -151,16 +151,17 @@ OutputSet solve_iter_sym(num A, uint N, num a, num sw11, num sw12, num sw21, num
 
 		g_iterations_count++;
 	}
-	COLLECT_RESULTS_MAKROS;
-	return result;
+	COLLECT_RESULTS_MAKROS;*/
+return;// result;
 }
 
-OutputSet solve_iter_sym(InputSet s)
+/*OutputSet*/ void solve_iter_sym(InputSet s)
 {
-	if (Preferences::one_kind)
+	/*if (Preferences::one_kind)
 		return solve_iter_sym_one_kind(s.A, s.N, s.a, s.sw11, s.sw12, s.sw21, s.sw22, s.sm1, s.sm2, s.b1, s.b2, s.d1, s.d2, s.d11, s.d12, s.d21, s.d22);
 	else
-		return solve_iter_sym(s.A, s.N, s.a, s.sw11, s.sw12, s.sw21, s.sw22, s.sm1, s.sm2, s.b1, s.b2, s.d1, s.d2, s.d11, s.d12, s.d21, s.d22);
+		return solve_iter_sym(s.A, s.N, s.a, s.sw11, s.sw12, s.sw21, s.sw22, s.sm1, s.sm2, s.b1, s.b2, s.d1, s.d2, s.d11, s.d12, s.d21, s.d22);*/
+	return;
 }
 
 template <typename T>

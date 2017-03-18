@@ -18,9 +18,10 @@ MatlabVector conv(MatlabVector a, MatlabVector b, int);
 result.N1 = N1; result.N2 = N2; result.rh = rh; \
 result.y11 = y11; result.y12 = y12; result.y21 = y21; result.y22 = y22
 
-OutputSet solve_iter_sym_one_kind(num A, uint N, num a, num sw11, num sw12, num sw21, num sw22, num sm1, num sm2, num b1, num b2, num d1, num d2, num d11, num d12, num d21, num d22)
+/*OutputSet */ void solve_iter_sym_one_kind(num A, uint N, num a, num sw11, num sw12, num sw21, num sw22, num sm1, num sm2, num b1, num b2, num d1, num d2, num d11, num d12, num d21, num d22)
 {
-	OutputSet result;
+	//OutputSet result;
+	/*
 
 	// precount functions
 	MatlabVector rh = linspace(-A, A, N);
@@ -95,6 +96,6 @@ OutputSet solve_iter_sym_one_kind(num A, uint N, num a, num sw11, num sw12, num 
 
 		g_iterations_count++;
 	}
-	COLLECT_RESULTS_MAKROS;
-	return result;
+	COLLECT_RESULTS_MAKROS;*/
+	return;// result;
 }

@@ -4,6 +4,7 @@
 #include "MatlabVector.h"
 #include "Distribution1D.h"
 #include "Preferences.h"
+#include "Partition.h"
 
 #include "./json/json.h"
 #include <iostream>
@@ -59,6 +60,7 @@ struct OutputSet
 	MatlabVector rh;
 	Distribution1D D11, D12, D22;
 	num y11, y12, y21, y22, N1, N2;
+	OutputSet(Partition &p) : D11(p), D12(p), D22(p) {}
 	operator Json::Value() const
 	{
 		Json::Value root;

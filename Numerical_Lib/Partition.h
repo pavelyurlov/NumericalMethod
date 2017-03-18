@@ -7,12 +7,10 @@
 class Partition
 {
 public:
-	Partition& GetPartition(num area_size, uint num_of_points);	// середина отрезка - в нуле
+	static Partition& GetPartition(num area_size, uint num_of_points);	// середина отрезка - в нуле
 	num GetStep();
 private: // funcs
 	Partition(uint id, num area_size, uint num_of_points);
-	Partition(Partition&); // no copy constructor
-	~Partition(); // no destructor
 	bool IsAlike(num area_size, uint num_of_points);
 private: // vars
 	const uint c_id;
