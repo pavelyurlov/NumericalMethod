@@ -5,12 +5,14 @@
 class Function
 {
 public:
+	virtual num At(num) const = 0;
 };
 
-class NormalFunction : public Function
+class NormalFunction1D : public Function
 {
 public:
-	NormalFunction(num param, num sigma);
+	NormalFunction1D(num param, num sigma);
+	virtual num At(num) const override;
 private:
 	const num m_param;
 	const num m_sigma;

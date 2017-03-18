@@ -26,3 +26,13 @@ num Partition::GetStep()
 {
 	return c_a / (c_n - 1);
 }
+
+uint Partition::GetNum()
+{
+	return c_n;
+}
+
+num Partition::ItoX(uint i)
+{
+	return -(c_a / 2) + i * GetStep();
+}

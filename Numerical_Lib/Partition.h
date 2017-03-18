@@ -9,6 +9,8 @@ class Partition
 public:
 	static Partition& GetPartition(num area_size, uint num_of_points);	// середина отрезка - в нуле
 	num GetStep();
+	uint GetNum();
+	num ItoX(uint); // get x corresponding to the index in the vector
 private: // funcs
 	Partition(uint id, num area_size, uint num_of_points);
 	bool IsAlike(num area_size, uint num_of_points);

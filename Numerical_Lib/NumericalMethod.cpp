@@ -21,16 +21,12 @@ void NumericalMethod::Count()
 	Distribution1D(&conv)(Distribution1D, Distribution1D) = Fourier::Convolution;
 
 	// init
-	Distribution1D m1(p,  NormalFunction(s.b1,  s.sm1));
-	Distribution1D m2(p,  NormalFunction(s.b2,  s.sm2));
-	Distribution1D w11(p, NormalFunction(s.d11, s.sw11));
-	Distribution1D w21(p, NormalFunction(s.d21, s.sw21));
-	Distribution1D w12(p, NormalFunction(s.d12, s.sw12));
-	Distribution1D w22(p, NormalFunction(s.d22, s.sw22));
-
-	o.D11 = Distribution1D(p, 0);
-	o.D12 = Distribution1D(p, 0);
-	o.D22 = Distribution1D(p, 0);
+	Distribution1D m1(p,  NormalFunction1D(s.b1,  s.sm1));
+	Distribution1D m2(p,  NormalFunction1D(s.b2,  s.sm2));
+	Distribution1D w11(p, NormalFunction1D(s.d11, s.sw11));
+	Distribution1D w21(p, NormalFunction1D(s.d21, s.sw21));
+	Distribution1D w12(p, NormalFunction1D(s.d12, s.sw12));
+	Distribution1D w22(p, NormalFunction1D(s.d22, s.sw22));
 
 	o.y11 = s.d11;
 	o.y12 = s.d12;

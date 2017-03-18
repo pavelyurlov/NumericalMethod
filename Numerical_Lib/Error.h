@@ -2,6 +2,8 @@
 
 #include <string>
 
+const std::wstring ERROR_UNDESCRIBED = L"[InputParser] Текст ошибки не написан.";
+
 class Error
 {
 public:
