@@ -1,7 +1,9 @@
 #pragma once
 
+#include "IOSets.h"
+
 class NumericalMethod
 {
 public:
-	static void Count();
+	static OutputSet Count(InputSet s);
 };
