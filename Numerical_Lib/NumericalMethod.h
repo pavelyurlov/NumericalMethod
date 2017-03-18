@@ -5,5 +5,11 @@
 class NumericalMethod
 {
 public:
-	static OutputSet Count(InputSet s);
+	NumericalMethod(InputSet input);
+	void Count();
+	OutputSet GetResult();
+private:
+	const InputSet c_input;
+	OutputSet m_result;
+	Partition & m_part;
 };
