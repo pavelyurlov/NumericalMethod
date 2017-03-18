@@ -72,7 +72,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>D:\Program Files %28x86%29\GnuWin32\include;E:\Code\Либы\ALGLIB_cpp\src;D:\OLD\Program Files\Intel\MKL\10.2.6.037\include;C:\Program Files (x86)\Microsoft SDKs\MPI\Include;C:\Program Files (x86)\Microsoft SDKs\MPI\Include\x86;E:\Code\Либы\fftw-3.3.4-dll32;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Program Files %28x86%29\GnuWin32\lib\Win32\Debug;E:\Code\Либы\ALGLIB_cpp\src\ALGLIB\Debug;C:\Program Files (x86)\Microsoft SDKs\MPI\Lib\x86;D:\OLD\Program Files\Intel\MKL\10.2.6.037\ia32\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>D:\Program Files %28x86%29\GnuWin32\lib\Win32\Debug;E:\Code\Либы\ALGLIB_cpp\src\ALGLIB\Debug;C:\Program Files (x86)\Microsoft SDKs\MPI\Lib\x86;D:\OLD\Program Files\Intel\MKL\10.2.6.037\ia32\lib;E:\Code\Либы\fftw-3.3.4-dll32;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -96,7 +96,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>gsl.lib;mkl_intel_c.lib;mkl_core.lib;mkl_sequential.lib;msmpi.lib;ALGLIB.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>gsl.lib;mkl_intel_c.lib;mkl_core.lib;mkl_sequential.lib;msmpi.lib;ALGLIB.lib;libfftw3-3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>

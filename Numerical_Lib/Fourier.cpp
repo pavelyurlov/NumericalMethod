@@ -270,7 +270,7 @@ Distribution1D Fourier::Convolution1D_FFTW(Distribution1D a, Distribution1D b)
 
 	return res;
 }
-
+/*
 MatlabVector& conv_fourier_lib(MatlabVector a, MatlabVector b)
 {
 	static uint size_a = 0, size_b = 0;
@@ -328,3 +328,4 @@ MatlabVector& conv_fourier_lib(MatlabVector a, MatlabVector b)
 
 	return res;
 }
+*/

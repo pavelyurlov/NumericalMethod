@@ -108,6 +108,6 @@ void NumericalMethod::Count()
 		o.N1 = N1_new;
 		o.N2 = N2_new;
 
-		g_iterations_count++;
+		//g_iterations_count++;
 	}
 }
