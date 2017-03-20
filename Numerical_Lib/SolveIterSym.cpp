@@ -10,6 +10,13 @@
 #include "MatlabVector.h"
 #include "IOSets.h"
 #include "normpdf_checked.h"
+#include "Main.h"
+
+void test()
+{
+	Main::Count(0, nullptr);
+}
+
 
 MatlabVector linspace(num start, num end, uint n_points);
 MatlabVector precount_func(num param, num sigma, uint N, MatlabVector &rh);

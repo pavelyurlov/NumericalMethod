@@ -1,33 +1,9 @@
-#pragma once
-// TODO: почистить input
-#include <vector>
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <mpi.h>
-#include <chrono>
-#include "./json/json.h"
-#include "IOSets.h"
-#include "minitypes.h"
+#include "Master.h"
 
-// TODO: всё в static?
-class Master
-{
-public:
-	void Count(std::vector<InputSet> input_array);
-private:
-	uint m_iterations_count;
-};
+#include "InputParser.h"
+#include "NumericalMethod.h"
 
-
-
-/*
-extern OutputSet solve_iter_sym(InputSet);
-
-uint g_iterations_count;
-
-// печатает в файл
-void count_input(std::vector<InputSet> input_array)
+void Master::Count(std::vector<InputSet> input_array)
 {
 	int mpi_rank, mpi_size;
 	MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
@@ -36,7 +12,7 @@ void count_input(std::vector<InputSet> input_array)
 	Json::Value root;
 	root = Json::arrayValue;
 
-	g_iterations_count = 0;
+	m_iterations_count = 0;
 	std::chrono::high_resolution_clock::time_point time_point_start = std::chrono::high_resolution_clock::now();
 
 	for (uint i = 0; i < input_array.size(); i++)
@@ -45,8 +21,10 @@ void count_input(std::vector<InputSet> input_array)
 		{
 			Json::Value newborn = Json::objectValue;
 			newborn["JobNumber"] = i;
+			NumericalMethod job = NumericalMethod(input_array[i]);
 			newborn["Input"] = input_array[i];
-			newborn["Output"] = solve_iter_sym(input_array[i]);
+			job.Count();
+			newborn["Output"] = job.GetResult();
 			root.append(newborn);
 			newborn.clear(); // too paranoic?
 
@@ -66,7 +44,6 @@ void count_input(std::vector<InputSet> input_array)
 	ofs << root;
 	ofs.close();
 
-	std::cout << "proc#" << mpi_rank << "; iterations:" << g_iterations_count << "; time:" << time_span.count() << " sec; timePerIteration:" << time_span.count() / g_iterations_count << " sec";
+	std::cout << "proc#" << mpi_rank << "; iterations:" << m_iterations_count << "; time:" << time_span.count() << " sec; timePerIteration:" << time_span.count() / m_iterations_count << " sec";
 }
 
-*/

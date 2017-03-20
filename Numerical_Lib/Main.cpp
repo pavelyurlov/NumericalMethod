@@ -7,17 +7,14 @@
 #include <iostream>
 #include <mpi.h>
 
-//extern OutputSet solve_iter_sym(InputSet);
-
 uint Preferences::dimentions;
 bool Preferences::print_D;
 bool Preferences::one_kind;
 uint Preferences::max_iter;
 
-
-int main(int cmdn, char* cmd[])
+int Main::Count(int cmdn, char* cmd[])
 {
-	/*MPI_Init(&cmdn, &cmd);
+	MPI_Init(&cmdn, &cmd);
 
 	int rank, size;
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -27,7 +24,8 @@ int main(int cmdn, char* cmd[])
 	try
 	{
 		std::vector<InputSet> input = InputParser::Parse("input.json");
-		count_input(input);
+		Master master = Master();
+		master.Count(input);
 	}
 	catch (std::exception e)
 	{
@@ -36,11 +34,5 @@ int main(int cmdn, char* cmd[])
 
 
 	MPI_Finalize();
-	return 0;*/
-}
-
-
-void Main::Count()
-{
-	// TODO
+	return 0;
 }

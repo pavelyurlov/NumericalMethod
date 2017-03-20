@@ -1,14 +1,6 @@
-#include "..\Numerical_Lib\InputParser.h"
+#include "..\Numerical_Lib\Main.h"
 
-#include <fstream>
-#include <iostream>
-
-void main()
+int main(int cmdn, char* cmd[])
 {
-	//std::ifstream file = std::ifstream("..\\Num_UnitTest\\TestFiles\\test_normal_file.json");
-	//std::cout << file.good();
-	//std::vector<InputSet> res = InputParser::Parse("..\\Num_UnitTest\\TestFiles\\test_normal_file.json");
-
-	InputSet is;
-	is.insert("N", 5);
+	return Main::Count(cmdn, cmd);
 }
