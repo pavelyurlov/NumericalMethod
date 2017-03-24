@@ -14,7 +14,7 @@ Partition& Partition::GetPartition(num area_size, uint num_of_points)
 	}
 	// если не нашли, делаем новое
 	s_all.push_back(Partition(s_all.size(), area_size, num_of_points));
-	return *s_all.end(); // TODO: выяснить, куда указывает end
+	return s_all.back();
 }
 
 bool Partition::IsAlike(num area_size, uint num_of_points)
