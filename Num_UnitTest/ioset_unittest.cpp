@@ -10,7 +10,7 @@ namespace Num_UnitTest
 	TEST_CLASS(IOSetUnitTest)
 	{
 	public:
-		TEST_METHOD(InsertN)
+		TEST_METHOD(IOSet__InsertN)
 		{
 			uint correct = 5;
 			InputSet is;

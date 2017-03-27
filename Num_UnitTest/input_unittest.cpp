@@ -48,14 +48,14 @@ namespace Num_UnitTest
 	{
 	public:
 
-		TEST_METHOD(ConcatWchar)
+		TEST_METHOD(Polygon_ConcatWchar)
 		{
 			const wchar_t * w1 = L"foo";
 			const wchar_t * w2 = L"bar";
 			Assert::AreEqual(L"foobar", Concat(w1, w2).c_str(), L"Слияние двух wchar_t строк");
 		}
 
-		TEST_METHOD(ConcatWcharNoFunction)
+		TEST_METHOD(Polygon_ConcatWcharNoFunction)
 		{
 			const wchar_t * w1 = L"foo";
 			const wchar_t * w2 = L"bar";
@@ -64,18 +64,18 @@ namespace Num_UnitTest
 			s.c_str();
 			Assert::AreEqual(L"foobar", s.c_str(), L"Слияние двух wchar_t строк");
 		}
-		TEST_METHOD(AssertErrorThrow)
+		TEST_METHOD(Polygon_AssertErrorThrow)
 		{
 			AssertError([] {throw Error(L"foo"); }, L"foo", L"Обработка бросания исключений");
 		}
 
-		TEST_METHOD(FindWorkingDir)
+		TEST_METHOD(Polygon_FindWorkingDir)
 		{
 			std::ofstream o = std::ofstream("file_to_find_working_dir.txt");
 			o.close();
 		}
 
-		TEST_METHOD(StaticCast)
+		TEST_METHOD(Polygon_StaticCast)
 		{
 			double value = 16.00000;
 			Assert::AreEqual(static_cast<uint>(16), static_cast<uint>(value), L"static_cast из double в uint");
@@ -87,23 +87,23 @@ namespace Num_UnitTest
 	public:
 		//**GENERAL**********************************************//
 
-		TEST_METHOD(NoFile)
+		TEST_METHOD(Input__NoFile)
 		{
 			AssertError([] { InputParser::Parse("test_guаrantee_nonexistant_file.orly"); }, ERROR_INPUT_PARSER_FILE_DOES_NOT_EXIST, L"Чтение из несуществующего файла.");
 		}
 
-		TEST_METHOD(CantReadVersion)
+		TEST_METHOD(Input__CantReadVersion)
 		{
 			AssertError([] { InputParser::Parse("..\\Num_UnitTest\\TestFiles\\test_bad_version_file.json"); }, ERROR_INPUT_PARSER_JSON_CANT_READ_VERSION, L"Плохая версия файла.");
 		}
 
-		TEST_METHOD(UnknownVersion)
+		TEST_METHOD(Input__UnknownVersion)
 		{
 			AssertError([] { InputParser::Parse("..\\Num_UnitTest\\TestFiles\\test_unknown_version_file.json"); }, ERROR_INPUT_PARSER_UNKNOWN_VERSION, L"Неизвестная версия файла.");
 		}
 		//**VERSION 1**********************************************//
 
-		TEST_METHOD(NormalFile)
+		TEST_METHOD(Input1_NormalFile)
 		{
 			std::vector<InputSet> res = InputParser::Parse("..\\Num_UnitTest\\TestFiles\\test_normal_file.json");
 			Assert::AreEqual((float)17, (float)res[0].A,    L"Обычное чтение из файла", LINE_INFO());
@@ -125,31 +125,31 @@ namespace Num_UnitTest
 			Assert::AreEqual((float)9,  (float)res[0].d22,  L"Обычное чтение из файла", LINE_INFO());
 		}
 
-		TEST_METHOD(LinkFile)
+		TEST_METHOD(Input1_LinkFile)
 		{
 			//Нормальная ссылка
 			Assert::Fail(L"UNDONE");
 		}
 
-		TEST_METHOD(GarbageLinkFile)
+		TEST_METHOD(Input1_GarbageLinkFile)
 		{
 			//Ссылка - не единственное поле
 			Assert::Fail(L"UNDONE");
 		}
 
-		TEST_METHOD(VoidLinkFile)
+		TEST_METHOD(Input1_VoidLinkFile)
 		{
 			//Ссылка в пустоту
 			Assert::Fail(L"UNDONE");
 		}
 
-		TEST_METHOD(BadLinkFile)
+		TEST_METHOD(Input1_BadLinkFile)
 		{
 			//Ссылка на плохой файл
 			Assert::Fail(L"UNDONE");
 		}
 
-		TEST_METHOD(MissingFieldFile)
+		TEST_METHOD(Input1_MissingFieldFile)
 		{
 			//Отсутствие поля
 			Assert::Fail(L"UNDONE");
