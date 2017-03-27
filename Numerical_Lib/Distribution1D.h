@@ -8,8 +8,8 @@
 class Distribution1D
 {
 public:
-	Distribution1D(Partition&, num n = 0);
-	Distribution1D(Partition&, Function&);
+	_declspec(dllimport) Distribution1D(Partition&, num n = 0);
+	_declspec(dllimport) Distribution1D(Partition&, Function&);
 
 	uint GetSize() { return m_data.size(); }
 	num* GetData() { return m_data.data(); }
@@ -25,12 +25,16 @@ public:
 	friend Distribution1D operator+(num, Distribution1D);
 	friend Distribution1D operator*(num, Distribution1D);
 	Distribution1D operator=(Distribution1D&);
+	_declspec(dllimport) bool operator==(Distribution1D&);
 	operator Json::Value() const;
 private:
+	static const num COMPARE_EPSILON;
+
 	Partition & m_part;
 	std::vector<num> m_data;
 	Distribution1D operator2(Distribution1D&, num(&)(num, num));
 	Distribution1D operator2(num, num(&)(num, num));
 	Distribution1D operator2(num(&f)(num, num), num);
 
+	num MaxModule();
 };

@@ -1,5 +1,10 @@
+#include <algorithm>
+#include <cmath>
+
 #include "Distribution1D.h"
 #include "Error.h"
+
+const num Distribution1D::COMPARE_EPSILON = 0.0001;
 
 Distribution1D::Distribution1D(Partition &p, num n) :
 	m_part(p)
@@ -25,6 +30,16 @@ num Distribution1D::CountIntegral()
 		res += elem;
 	}
 	return res / m_part.GetStep();
+}
+
+num Distribution1D::MaxModule()
+{
+	num res = 0;
+	for (num data : m_data)
+	{
+		res = std::max(res, fabs(data));
+	}
+	return res;
 }
 
 Distribution1D Distribution1D::operator2(Distribution1D &o, num(&f)(num, num))
@@ -75,6 +90,11 @@ Distribution1D Distribution1D::operator*(num o) { return operator2(o, mult); }
 
 Distribution1D operator+(num n, Distribution1D d) { return d.operator2(plus, n); }
 Distribution1D operator*(num n, Distribution1D d) {	return d.operator2(mult, n); }
+
+bool Distribution1D::operator==(Distribution1D &other)
+{
+	return (*this - other).MaxModule() < Distribution1D::COMPARE_EPSILON;
+}
 
 Distribution1D::operator Json::Value() const
 {
