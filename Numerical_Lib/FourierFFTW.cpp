@@ -44,7 +44,7 @@ Distribution1D Fourier::Convolution(Distribution1D a, Distribution1D b)
 	}
 	fftw_execute(fpb);
 
-	for (uint i = 0; i < a.GetSize(); i++) // выход за пределы, если массивы разного размера. Но этого не должно случиться.
+	for (uint i = 0; i < a.GetSize(); i++) // РІС‹С…РѕРґ Р·Р° РїСЂРµРґРµР»С‹, РµСЃР»Рё РјР°СЃСЃРёРІС‹ СЂР°Р·РЅРѕРіРѕ СЂР°Р·РјРµСЂР°. РќРѕ СЌС‚РѕРіРѕ РЅРµ РґРѕР»Р¶РЅРѕ СЃР»СѓС‡РёС‚СЊСЃСЏ.
 	{
 		auto tmp_compl = std::complex<num>(fA[i][0], fA[i][1]) * std::complex<num>(fB[i][0], fB[i][1]);
 		fA[i][0] = tmp_compl.real();
@@ -53,7 +53,7 @@ Distribution1D Fourier::Convolution(Distribution1D a, Distribution1D b)
 
 	fftw_execute(bpa);
 
-	Distribution1D res = a; // TODO: проверить копирование. Лучше сделать через прямое создание
+	Distribution1D res = a; // TODO: РїСЂРѕРІРµСЂРёС‚СЊ РєРѕРїРёСЂРѕРІР°РЅРёРµ. Р›СѓС‡С€Рµ СЃРґРµР»Р°С‚СЊ С‡РµСЂРµР· РїСЂСЏРјРѕРµ СЃРѕР·РґР°РЅРёРµ
 	for (uint i = 0; i < res.GetSize(); i++)
 	{
 		res.GetData()[i] = nA[i][0];

@@ -9,6 +9,10 @@
 #include "./json/json.h"
 #include <iostream>
 
+/*!
+@brief Входные данные численного метода
+@details Структура, в которой хранятся параметры для одного запуска численного метода
+*/
 struct InputSet
 {
 	num A;
@@ -55,6 +59,10 @@ struct InputSet
 	void insert(std::string field, T value);
 };
 
+/*!
+@brief Выходные данные численного метода
+@details Структура, в которой хранятся результаты одного запуска численного метода
+*/
 struct OutputSet
 {
 	MatlabVector rh;

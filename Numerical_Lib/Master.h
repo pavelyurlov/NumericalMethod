@@ -10,7 +10,11 @@
 #include "IOSets.h"
 #include "minitypes.h"
 
-// TODO: всё в static?
+/*!
+@brief Подсчёт массива численных методов
+@details Класс, который считает численный метод для каждого из входных InputSet и печатает результат в файл.
+@todo всё в static?
+*/
 class Master
 {
 public:
