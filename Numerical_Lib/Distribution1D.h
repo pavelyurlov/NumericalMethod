@@ -3,7 +3,7 @@
 #include "minitypes.h"
 #include "Partition.h"
 #include "Function.h"
-#include "json\json.h"
+#include "./json/json.h"
 
 /*!
 @brief Одномерное числовое распределение

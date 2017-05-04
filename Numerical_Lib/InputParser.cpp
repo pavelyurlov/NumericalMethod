@@ -1,6 +1,6 @@
 #include "InputParser.h"
 #include <fstream>
-#include "json\json.h"
+#include "./json/json.h"
 #include "Error.h"
 
 using std::string;
