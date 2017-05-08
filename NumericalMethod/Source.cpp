@@ -1,4 +1,4 @@
-#include "..\Numerical_Lib\Main.h"
+#include "../Numerical_Lib/Main.h"
 
 int main(int cmdn, char* cmd[])
 {
