@@ -1,6 +1,7 @@
 #pragma once
 
 #include "minitypes.h"
+#include "macros.h"
 #include <vector>
 
 // Равномерное разбиение
@@ -13,7 +14,7 @@
 class Partition
 {
 public:
-	_declspec(dllimport) static Partition& GetPartition(num area_size, uint num_of_points);	// середина отрезка - в нуле
+	MSTESTPREFIX static Partition& GetPartition(num area_size, uint num_of_points);	// середина отрезка - в нуле
 	num GetStep();
 	uint GetNum();
 	num ItoX(uint); // get x corresponding to the index in the vector

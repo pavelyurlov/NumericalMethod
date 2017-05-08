@@ -1,5 +1,6 @@
 #pragma once
 
+#include "macros.h"
 #include "minitypes.h"
 #include "Partition.h"
 #include "Function.h"
@@ -22,7 +23,7 @@ public:
 	@param[in] p Одномерное разбиение, служащее основой будущего распределения.
 	@param[in] n Константа, в которую устанавливаются все значения точек.
 	*/
-	_declspec(dllimport) Distribution1D(Partition&, num n = 0);
+	MSTESTPREFIX Distribution1D(Partition&, num n = 0);
 
 	/*!
 	@brief Конструктор с функцией
@@ -30,7 +31,7 @@ public:
 	@param[in] p Одномерное разбиение, служащее основой будущего распределения.
 	@param[in] f Функция, которая используется для вычисления значений точек.
 	*/
-	_declspec(dllimport) Distribution1D(Partition&, Function&);
+	MSTESTPREFIX Distribution1D(Partition&, Function&);
 
 	/*!
 	@brief Получение количества точек в распределении
@@ -59,7 +60,7 @@ public:
 	friend Distribution1D operator+(num, Distribution1D); //!< Прибавление числа к распределению
 	friend Distribution1D operator*(num, Distribution1D); //!< Умножение распределения на число
 	Distribution1D operator=(Distribution1D&);
-	_declspec(dllimport) bool operator==(Distribution1D&);
+	MSTESTPREFIX bool operator==(Distribution1D&);
 	operator Json::Value() const;
 private:
 	static const num COMPARE_EPSILON; //!< Число, используемое для сравнения двух чисел из Distribution1D

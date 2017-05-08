@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "macros.h"
+
 const std::wstring ERROR_UNDESCRIBED = L"[InputParser] Текст ошибки не написан.";
 
 /*!
@@ -10,8 +12,8 @@ const std::wstring ERROR_UNDESCRIBED = L"[InputParser] Текст ошибки �
 class Error
 {
 public:
-	_declspec(dllimport) Error(std::wstring _message);
-	_declspec(dllimport) std::wstring GetMessage();
+	MSTESTPREFIX Error(std::wstring _message);
+	MSTESTPREFIX std::wstring GetMessage();
 private:
 	std::wstring m_message;
 };

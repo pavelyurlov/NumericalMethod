@@ -1,6 +1,7 @@
 #pragma once
 
 #include "minitypes.h"
+#include "macros.h"
 
 /*!
 @brief Интерфейсный класс для использования математических функций
@@ -25,7 +26,7 @@ public:
 class NormalFunction1D : public Function
 {
 public:
-	_declspec(dllimport) NormalFunction1D(num param, num sigma);
+	MSTESTPREFIX NormalFunction1D(num param, num sigma);
 	virtual num At(num) const override;
 private:
 	const num m_param;

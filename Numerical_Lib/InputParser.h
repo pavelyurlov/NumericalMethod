@@ -1,5 +1,6 @@
 #pragma once
 
+#include "macros.h"
 #include "IOSets.h"
 
 
@@ -14,6 +15,6 @@ const std::wstring ERROR_INPUT_PARSER_UNKNOWN_VERSION			= L"[InputParser] Неи
 class InputParser
 {
 public:
-	_declspec(dllimport) static std::vector<InputSet> Parse(std::string filename);
+	MSTESTPREFIX static std::vector<InputSet> Parse(std::string filename);
 };
 
