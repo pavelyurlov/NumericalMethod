@@ -3,20 +3,25 @@
 #include "MatlabVector.h"
 #include <complex>
 
+#ifndef FFTW
 #include <mkl_types.h>
 #include <mkl.h>
 #include <mkl_dfti.h>
+#endif // !FFTW
 
 #include "Preferences.h"
 #include <specialfunctions.h>
 #include <gsl\gsl_dht.h>
 
+#ifdef FFTW
 #include <fftw3.h>
+#endif // FFTW
 
 #include "Fourier.h"
 
 // быстрое одномерное преобразование Фурье векторов a и b ака численно заданных функций
 // вектор a и вектор b должны быть одинакового размера
+#ifndef FFTW
 MatlabVector conv_fourier_lib(MatlabVector a, MatlabVector b)
 {
 	static uint size_a = 0, size_b = 0;
@@ -77,6 +82,7 @@ MatlabVector conv_fourier_lib(MatlabVector a, MatlabVector b)
 
 	return res;
 }
+#endif // !FFTW
 
 // прямое преобразование Ханкеля
 MatlabVector hankel_2D_direct(MatlabVector f)
@@ -144,6 +150,7 @@ MatlabVector conv_radial_2D(MatlabVector a, MatlabVector b)
 	return res;
 }
 
+#ifndef FFTW
 MatlabVector conv_1d_mkl(MatlabVector a, MatlabVector b)
 {
 	static uint size_a = 0, size_b = 0;
@@ -158,7 +165,9 @@ MatlabVector conv_1d_mkl(MatlabVector a, MatlabVector b)
 	vsldConvExec1D(convolution_ptr, a.data(), 1, b.data(), 1, res.data(), 1);
 	return res;
 }
+#endif // FFTW
 
+#ifndef FFTW
 MatlabVector conv_2d_mkl(MatlabVector a, MatlabVector b)
 {
 	static uint size_a = 0, size_b = 0;
@@ -174,6 +183,7 @@ MatlabVector conv_2d_mkl(MatlabVector a, MatlabVector b)
 	vsldConvExec(convolution_ptr, a.data(), shape, b.data(), shape, res.data(), shape);
 	return res;
 }
+#endif // FFTW
 
 // внешний "интерфейс"
 // основная программа вызывает эту функцию
@@ -181,10 +191,12 @@ MatlabVector conv(MatlabVector a, MatlabVector b, int) // int в конце не
 {
 	switch (Preferences::dimentions)
 	{
+#ifndef FFTW
 	case 1:
 		return conv_1d_mkl(a, b);
 	case 2:
 		return conv_2d_mkl(a, b);
+#endif // FFTW
 	default:
 		throw 123;
 	}

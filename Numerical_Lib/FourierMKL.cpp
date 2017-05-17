@@ -1,3 +1,4 @@
+#ifndef FFTW
 #include "FourierMKL.h"
 
 #include <mkl_types.h>
@@ -19,3 +20,4 @@ Distribution1D FourierMKL::Convolution(Distribution1D a, Distribution1D b)
 	vsldConvExec1D(convolution_ptr, a.GetData(), 1, b.GetData(), 1, res.GetData(), 1);
 	return res;
 }
+#endif // FFTW

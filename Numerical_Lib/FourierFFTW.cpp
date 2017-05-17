@@ -1,3 +1,4 @@
+#ifdef FFTW
 #include "FourierFFTW.h"
 
 #include <fftw3.h>
@@ -61,3 +62,4 @@ Distribution1D Fourier::Convolution(Distribution1D a, Distribution1D b)
 
 	return res;
 }
+#endif // FFTW

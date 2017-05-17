@@ -160,6 +160,7 @@
     <ClInclude Include="IOSets.h" />
     <ClInclude Include="json\json-forwards.h" />
     <ClInclude Include="json\json.h" />
+    <ClInclude Include="macros.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="Master.h" />
     <ClInclude Include="MatlabVector.h" />
